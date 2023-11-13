@@ -15,11 +15,10 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
         readonly string connectionPath = "Data Source=DataBase/board.db;Cache=Shared";
 
         public void Add(Board board) {
-            string queryText = "INSERT INTO board (id, name, description, board_owner_id) " + 
-                                "VALUES (@id, @name, @description, @board_owner_id)";
+            string queryText = "INSERT INTO board (name, description, board_owner_id) " + 
+                                "VALUES (@name, @description, @board_owner_id)";
             using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
                 SQLiteCommand query = new SQLiteCommand(queryText, connection);
-                query.Parameters.Add(new SQLiteParameter("@id", board.Id));
                 query.Parameters.Add(new SQLiteParameter("@name", board.Name));
                 query.Parameters.Add(new SQLiteParameter("@description", board.Description));
                 query.Parameters.Add(new SQLiteParameter("@board_owner_id", board.OwnerId));
@@ -30,14 +29,13 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
         }
 
         public void Update(int id, Board board) {
-            string queryText = "UPDATE board SET name = @name, description = @description, board_owner_id = @board_owner_id " + 
+            string queryText = "UPDATE board SET name = @name, description = @description " + 
                                 "WHERE id = @id";
             using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
                 SQLiteCommand query = new SQLiteCommand(queryText, connection);
                 query.Parameters.Add(new SQLiteParameter("@id", id));
                 query.Parameters.Add(new SQLiteParameter("@name", board.Name));
                 query.Parameters.Add(new SQLiteParameter("@description", board.Description));
-                query.Parameters.Add(new SQLiteParameter("@board_owner_id", board.OwnerId));
                 connection.Open();
                 query.ExecuteNonQuery();
                 connection.Close();

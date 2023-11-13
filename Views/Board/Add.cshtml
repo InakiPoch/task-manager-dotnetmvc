@@ -1,0 +1,22 @@
+﻿@{ 
+    ViewData["Title"] = "Add Board";
+}
+
+@model Board
+
+<h1>@ViewData["Title"]</h1>
+<form asp-controller="Board" asp-action="Add">
+    <div class="form-group">
+        <label for="name">Nombre del tablero</label>
+        <input asp-for = "@Model.Name" class="form-control" id="name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Descripcion</label>
+        <input asp-for = "@Model.Description" class="form-control" id="description">
+    </div>
+    <div class="form-group">
+        <label for="owner-id">ID del usuario al que pertenece</label>
+        <input asp-for = "@Model.OwnerId" class="form-control" id="owner-id">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

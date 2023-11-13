@@ -16,11 +16,10 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
         readonly string connectionPath = "Data Source=DataBase/board.db;Cache=Shared";
 
         public void Add(int boardId, Tasks task) {
-            string queryText = "INSERT INTO task (id, board_id, name, state, description, color, assigned_user_id) " +  
-                                "VALUES (@id, @board_id, @name, @state, @description, @color, @assigned_user_id)";
+            string queryText = "INSERT INTO task (board_id, name, state, description, color, assigned_user_id) " +  
+                                "VALUES (@board_id, @name, @state, @description, @color, @assigned_user_id)";
             using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
                 SQLiteCommand query = new SQLiteCommand(queryText, connection);
-                query.Parameters.Add(new SQLiteParameter("@id", task.Id));
                 query.Parameters.Add(new SQLiteParameter("@board_id", boardId));
                 query.Parameters.Add(new SQLiteParameter("@name", task.Name));
                 query.Parameters.Add(new SQLiteParameter("@state", task.State));
@@ -34,12 +33,11 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
         }
 
         public void Update(int id, Tasks task) {
-            string queryText = "UPDATE user SET board_id = @board_id, name = @name, state = @state, description = @description " +  
+            string queryText = "UPDATE task SET name = @name, state = @state, description = @description, " +  
                                 "color = @color, assigned_user_id = @assigned_user_id WHERE id = @id";
             using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
                 SQLiteCommand query = new SQLiteCommand(queryText, connection);
                 query.Parameters.Add(new SQLiteParameter("@id", id));
-                query.Parameters.Add(new SQLiteParameter("@board_id", task.BoardId));
                 query.Parameters.Add(new SQLiteParameter("@name", task.Name));
                 query.Parameters.Add(new SQLiteParameter("@state", task.State));
                 query.Parameters.Add(new SQLiteParameter("@description", task.Description));
@@ -49,6 +47,31 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
                 query.ExecuteNonQuery();
                 connection.Close();
             }
+        }
+
+        public List<Tasks> GetAll() {
+            string queryText = "SELECT * FROM task";
+            List<Tasks> tasks = new List<Tasks>();
+            using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+                SQLiteCommand query = new SQLiteCommand(queryText, connection);
+                connection.Open();
+                using(SQLiteDataReader reader = query.ExecuteReader()) {
+                    while(reader.Read()) {
+                        var task = new Tasks() {
+                            Id = Convert.ToInt32(reader["id"]),
+                            BoardId = Convert.ToInt32(reader["board_id"]),
+                            Name = reader["name"].ToString(),
+                            State = (TasksState)Convert.ToInt32(reader["state"]),
+                            Description = reader["description"].ToString(),
+                            Color = reader["color"].ToString(),
+                            AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
+                        };
+                        tasks.Add(task);
+                    }
+                }
+                connection.Close();
+            }
+            return tasks;
         }
 
         public Tasks GetById(int id) {

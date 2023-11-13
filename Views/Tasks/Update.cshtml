@@ -1,0 +1,27 @@
+@{ 
+    ViewData["Title"] = "Update Task";
+}
+
+@model Tasks
+
+<h1>@ViewData["Title"]</h1>
+<form asp-controller="Tasks" asp-action="Update">
+    <input hidden asp-for = "@Model.Id">
+    <div class="form-group">
+        <label for="name">Nombre de la tarea</label>
+        <input asp-for = "@Model.Name" class="form-control" id="name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Descripcion</label>
+        <input asp-for = "@Model.Description" class="form-control" id="description">
+    </div>
+    <div class="form-group">
+        <label for="color">Color</label>
+        <input asp-for = "@Model.Color" class="form-control" id="color">
+    </div>
+    <div class="form-group">
+        <label for="state">Estado (0: Idea, 1: ToDo, 2: Doing, 3:Review, 4: Done)</label>
+        <input asp-for = "@Model.State" class="form-control" id="state">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

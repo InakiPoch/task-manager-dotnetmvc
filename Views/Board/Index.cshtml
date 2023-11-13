@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<Board>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Owner ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Board board in Model) {
+            <tr>
+                <td>@board.Id</td>
+                <td>@board.Name</td>
+                <td>@board.Description</td>
+                <td>@board.OwnerId</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                    </button>
+                    <button class="btn btn-primary">
+                        <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <button class="btn btn-outline-primary">
+        <a asp-controller="Board" asp-action="Add">Add Board</a>
+    </button>
+</table>
