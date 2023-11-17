@@ -11,7 +11,7 @@ public interface ITasksRepository {
     void AssignTask(int usarId, int taskId);
 }
 
-namespace tl2_tp09_2023_InakiPoch.Repositories {
+namespace tl2_tp10_2023_InakiPoch.Repositories {
     public class TasksRepository : ITasksRepository {
         readonly string connectionPath = "Data Source=DataBase/board.db;Cache=Shared";
 

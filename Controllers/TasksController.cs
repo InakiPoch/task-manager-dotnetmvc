@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using tl2_tp09_2023_InakiPoch.Repositories;
+using tl2_tp10_2023_InakiPoch.Repositories;
 using tl2_tp10_2023_InakiPoch.Models;
 
 namespace tl2_tp10_2023_InakiPoch.Controllers;
@@ -15,8 +15,11 @@ public class TasksController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Index() => View(tasksRepository.GetAll());
-
+    public IActionResult Index() {
+        if(HttpContext.Session.GetString("Usuario") == string.Empty) 
+            return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(tasksRepository.GetAll());
+    }
 
     [HttpGet]
     public IActionResult Add() => View(new Tasks());

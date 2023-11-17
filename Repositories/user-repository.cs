@@ -9,15 +9,16 @@ public interface IUserRepository {
     void Delete(int id);
 }
 
-namespace tl2_tp09_2023_InakiPoch.Repositories {
+namespace tl2_tp10_2023_InakiPoch.Repositories {
     public class UserRepository : IUserRepository {
         readonly string connectionPath = "Data Source=DataBase/board.db;Cache=Shared";
 
         public void Add(User user) {
-            string queryText = "INSERT INTO user (username) VALUES (@username)";
+            string queryText = "INSERT INTO user (username, role) VALUES (@username, @role)";
             using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
                 SQLiteCommand query = new SQLiteCommand(queryText, connection);
                 query.Parameters.Add(new SQLiteParameter("@username", user.Username));
+                query.Parameters.Add(new SQLiteParameter("@role", user.Role));
                 connection.Open();
                 query.ExecuteNonQuery();
                 connection.Close();
@@ -83,6 +84,40 @@ namespace tl2_tp09_2023_InakiPoch.Repositories {
                 query.ExecuteNonQuery();
                 connection.Close();
             }
+        }
+
+        public bool IsAdmin(int id) {
+                string queryText = "SELECT role FROM user WHERE id = @id";
+                bool isAdmin = false;
+                using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+                SQLiteCommand query = new SQLiteCommand(queryText, connection);
+                query.Parameters.Add(new SQLiteParameter("@id", id));
+                connection.Open();
+                using(SQLiteDataReader reader = query.ExecuteReader()) {
+                    while(reader.Read()) {
+                        isAdmin = reader["role"].ToString() == "admin";
+                    }
+                }
+                connection.Close();
+            }
+            return isAdmin;
+        }
+
+        public bool PasswordMatches(int id, string password) {
+            string queryText = "SELECT password FROM user WHERE id = @id";
+            bool passwordMatches = false;
+            using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+                SQLiteCommand query = new SQLiteCommand(queryText, connection);
+                query.Parameters.Add(new SQLiteParameter("@id", id));
+                connection.Open();
+                using(SQLiteDataReader reader = query.ExecuteReader()) {
+                    while(reader.Read()) {
+                        passwordMatches = reader["password"].ToString() == password;
+                    }
+                }
+                connection.Close();
+            }
+            return passwordMatches;
         }
     }
 }

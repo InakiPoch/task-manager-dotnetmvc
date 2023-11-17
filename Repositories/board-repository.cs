@@ -10,7 +10,7 @@ public interface IBoardRepository {
     void Delete(int id);
 }
 
-namespace tl2_tp09_2023_InakiPoch.Repositories {
+namespace tl2_tp10_2023_InakiPoch.Repositories {
     public class BoardRepository : IBoardRepository {
         readonly string connectionPath = "Data Source=DataBase/board.db;Cache=Shared";
 
