@@ -65,6 +65,6 @@ public class TasksController : Controller {
     }
 
     private bool Logged() => HttpContext.Session != null;
-    private bool UserIsAdmin() => HttpContext.Session.GetString("Usuario") == Enum.GetName(Role.Admin);
+    private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
  
 }
