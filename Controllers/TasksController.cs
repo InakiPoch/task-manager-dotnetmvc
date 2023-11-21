@@ -16,8 +16,7 @@ public class TasksController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(HttpContext.Session.GetString("Usuario") == string.Empty) 
-            return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         return View(tasksRepository.GetAll());
     }
 
@@ -26,6 +25,7 @@ public class TasksController : Controller {
 
     [HttpPost]
     public IActionResult Add(Tasks tasks) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
         tasksRepository.Add(tasks.BoardId, tasks);
         return RedirectToAction("Index");
     }
@@ -35,6 +35,7 @@ public class TasksController : Controller {
 
     [HttpPost]
     public IActionResult Update(Tasks tasks) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
         tasksRepository.Update(tasks.Id, tasks);
         return RedirectToAction("Index");
     }
@@ -42,6 +43,7 @@ public class TasksController : Controller {
 
     [HttpGet]
     public IActionResult Delete(int id) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
         tasksRepository.Delete(id);
         return RedirectToAction("Index");
     }
@@ -50,4 +52,6 @@ public class TasksController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    private bool Logged() => HttpContext.Session != null; 
 }

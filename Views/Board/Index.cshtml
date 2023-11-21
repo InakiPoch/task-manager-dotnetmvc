@@ -2,7 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model List<Board>
+@using tl2_tp10_2023_InakiPoch.ViewModels
+@model GetBoardsViewModel
 
 <table class="table">
     <thead class="thead-dark">
@@ -14,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Board board in Model) {
+        @foreach(Board board in Model.Boards) {
             <tr>
                 <td>@board.Id</td>
                 <td>@board.Name</td>

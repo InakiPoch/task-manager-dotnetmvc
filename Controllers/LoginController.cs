@@ -16,7 +16,9 @@ public class LoginController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Index() => View(new LoginViewModel());
+    public IActionResult Index() {
+        return View(new LoginViewModel());
+    }
 
     [HttpPost]
     public IActionResult Login(LoginViewModel user) {
@@ -28,9 +30,10 @@ public class LoginController : Controller {
     }
 
     private void LogUser(User user) {
+        HttpContext.Session.SetString("Id", user.Id.ToString());
         HttpContext.Session.SetString("Usuario", user.Username);
         HttpContext.Session.SetString("Password", user.Password);
-        HttpContext.Session.SetString("Role", user.Role);
+        HttpContext.Session.SetString("Role", Enum.GetName(user.Role));
     } 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

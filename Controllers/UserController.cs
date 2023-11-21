@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_InakiPoch.Repositories;
 using tl2_tp10_2023_InakiPoch.Models;
+using tl2_tp10_2023_InakiPoch.ViewModels;
 
 namespace tl2_tp10_2023_InakiPoch.Controllers;
 
@@ -16,32 +17,47 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(HttpContext.Session.GetString("Usuario") == string.Empty) 
-            return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(userRepository.GetAll());
+        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(new GetUsersViewModel(userRepository.GetAll()));
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new User());
+    public IActionResult Add() { 
+        if(!UserIsAdmin()) return RedirectToAction("Index");
+        return View(new AddUserViewModel());
+    }
 
     [HttpPost]
-    public IActionResult Add(User user) {
-        userRepository.Add(user);
+    public IActionResult Add(AddUserViewModel user) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
+        var newUser = new User() {
+            Username = user.Username,
+            Password = user.Password,
+            Role = user.Role
+        };
+        userRepository.Add(newUser);
         return RedirectToAction("Index");
     }
 
     [HttpGet]
-    public IActionResult Update(int id) => View(userRepository.GetById(id));
+    public IActionResult Update(int id) {
+        if(!UserIsAdmin()) return RedirectToAction("Index");
+        return View(new UpdateUserViewModel(userRepository.GetById(id)));
+    }
 
     [HttpPost]
-    public IActionResult Update(User user) {
-        userRepository.Update(user.Id, user);
+    public IActionResult Update(UpdateUserViewModel user) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
+        var targetUser = userRepository.GetAll().FirstOrDefault(u => u.Id == user.Id);
+        userRepository.Update(targetUser.Id, targetUser);
         return RedirectToAction("Index");
     }
 
 
     [HttpGet]
     public IActionResult Delete(int id) {
+        if(!UserIsAdmin()) return RedirectToAction("Index");
+        if(!ModelState.IsValid) return RedirectToAction("Index");
         userRepository.Delete(id);
         return RedirectToAction("Index");
     }
@@ -50,4 +66,7 @@ public class UserController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    private bool UserIsAdmin() => HttpContext.Session.GetString("Usuario") == Enum.GetName(Role.Admin);
+    private bool Logged() => HttpContext.Session != null; 
 }

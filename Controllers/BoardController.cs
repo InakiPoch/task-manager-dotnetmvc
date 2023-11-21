@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_InakiPoch.Repositories;
 using tl2_tp10_2023_InakiPoch.Models;
+using tl2_tp10_2023_InakiPoch.ViewModels;
 
 namespace tl2_tp10_2023_InakiPoch.Controllers;
 
@@ -16,32 +17,42 @@ public class BoardController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(HttpContext.Session.GetString("Usuario") == string.Empty) 
-            return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(boardRepository.GetAll());
+        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(UserIsAdmin()) return View(new GetBoardsViewModel(boardRepository.GetAll()));
+        var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+        return View(new GetBoardsViewModel(boardRepository.GetByUser(loggedUserId)));
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new Board());
+    public IActionResult Add() => View(new AddBoardViewModel());
 
     [HttpPost]
-    public IActionResult Add(Board Board) {
-        boardRepository.Add(Board);
+    public IActionResult Add(AddBoardViewModel board) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
+        var newBoard = new Board() {
+            Name = board.Name,
+            Description = board.Description,
+            OwnerId = board.OwnerId
+        };
+        boardRepository.Add(newBoard);
         return RedirectToAction("Index");
     }
 
     [HttpGet]
-    public IActionResult Update(int id) => View(boardRepository.GetById(id));
+    public IActionResult Update(int id) => View(new UpdateBoardViewModel(boardRepository.GetById(id)));
 
     [HttpPost]
-    public IActionResult Update(Board board) {
-        boardRepository.Update(board.Id, board);
+    public IActionResult Update(UpdateBoardViewModel board) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
+        var targetBoard = boardRepository.GetAll().FirstOrDefault(b => b.Id == board.Id);
+        boardRepository.Update(targetBoard.Id, targetBoard);
         return RedirectToAction("Index");
     }
 
 
     [HttpGet]
     public IActionResult Delete(int id) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
         boardRepository.Delete(id);
         return RedirectToAction("Index");
     }
@@ -50,4 +61,7 @@ public class BoardController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    private bool UserIsAdmin() => HttpContext.Session.GetString("Usuario") == Enum.GetName(Role.Admin);
+    private bool Logged() => HttpContext.Session != null; 
 }

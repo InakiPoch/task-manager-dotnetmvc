@@ -85,39 +85,5 @@ namespace tl2_tp10_2023_InakiPoch.Repositories {
                 connection.Close();
             }
         }
-
-        public bool IsAdmin(int id) {
-                string queryText = "SELECT role FROM user WHERE id = @id";
-                bool isAdmin = false;
-                using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
-                SQLiteCommand query = new SQLiteCommand(queryText, connection);
-                query.Parameters.Add(new SQLiteParameter("@id", id));
-                connection.Open();
-                using(SQLiteDataReader reader = query.ExecuteReader()) {
-                    while(reader.Read()) {
-                        isAdmin = reader["role"].ToString() == "admin";
-                    }
-                }
-                connection.Close();
-            }
-            return isAdmin;
-        }
-
-        public bool PasswordMatches(int id, string password) {
-            string queryText = "SELECT password FROM user WHERE id = @id";
-            bool passwordMatches = false;
-            using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
-                SQLiteCommand query = new SQLiteCommand(queryText, connection);
-                query.Parameters.Add(new SQLiteParameter("@id", id));
-                connection.Open();
-                using(SQLiteDataReader reader = query.ExecuteReader()) {
-                    while(reader.Read()) {
-                        passwordMatches = reader["password"].ToString() == password;
-                    }
-                }
-                connection.Close();
-            }
-            return passwordMatches;
-        }
     }
 }
