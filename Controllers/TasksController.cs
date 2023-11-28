@@ -17,7 +17,7 @@ public class TasksController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(UserIsAdmin()) return View(new GetTasksViewModel(tasksRepository.GetAll()));
         var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
         return View(new GetTasksViewModel(tasksRepository.GetByUser(loggedUserId)));
@@ -47,7 +47,16 @@ public class TasksController : Controller {
     public IActionResult Update(UpdateTaskViewModel task) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
         var targetTask = tasksRepository.GetAll().FirstOrDefault(t => t.Id == task.Id);
-        tasksRepository.Update(targetTask.Id, targetTask);
+        var updatedTask = new Tasks() {
+            Id = task.Id,
+            BoardId = targetTask.BoardId,
+            Name = task.Name,
+            State = task.State,
+            Description = task.Description,
+            Color = task.Color,
+            AssignedUserId = targetTask.AssignedUserId
+        };
+        tasksRepository.Update(task.Id, updatedTask);
         return RedirectToAction("Index");
     }
 
@@ -64,7 +73,7 @@ public class TasksController : Controller {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    private bool Logged() => HttpContext.Session != null;
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
  
 }

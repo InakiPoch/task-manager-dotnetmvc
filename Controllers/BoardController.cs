@@ -17,7 +17,7 @@ public class BoardController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(UserIsAdmin()) return View(new GetBoardsViewModel(boardRepository.GetAll()));
         var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
         return View(new GetBoardsViewModel(boardRepository.GetByUser(loggedUserId)));
@@ -45,7 +45,13 @@ public class BoardController : Controller {
     public IActionResult Update(UpdateBoardViewModel board) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
         var targetBoard = boardRepository.GetAll().FirstOrDefault(b => b.Id == board.Id);
-        boardRepository.Update(targetBoard.Id, targetBoard);
+        var updatedBoard = new Board() {
+            Id = board.Id,
+            OwnerId = targetBoard.OwnerId,
+            Name = board.Name,
+            Description = board.Description
+        };
+        boardRepository.Update(board.Id, updatedBoard);
         return RedirectToAction("Index");
     }
 
@@ -63,5 +69,5 @@ public class BoardController : Controller {
     }
 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool Logged() => HttpContext.Session != null; 
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
 }

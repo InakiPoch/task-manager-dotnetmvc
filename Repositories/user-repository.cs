@@ -47,7 +47,9 @@ namespace tl2_tp10_2023_InakiPoch.Repositories {
                     while(reader.Read()) {
                         var user = new User() {
                             Id = Convert.ToInt32(reader["id"]),
-                            Username = reader["username"].ToString()
+                            Username = reader["username"].ToString(),
+                            Role = (Role)Convert.ToInt32(reader["role"]),
+                            Password = reader["password"].ToString()
                         };
                         users.Add(user);
                     }

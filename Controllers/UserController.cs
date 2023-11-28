@@ -17,7 +17,7 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Index() {
-        if(!Logged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         return View(new GetUsersViewModel(userRepository.GetAll()));
     }
 
@@ -49,7 +49,13 @@ public class UserController : Controller {
     public IActionResult Update(UpdateUserViewModel user) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
         var targetUser = userRepository.GetAll().FirstOrDefault(u => u.Id == user.Id);
-        userRepository.Update(targetUser.Id, targetUser);
+        var updatedUser = new User() {
+            Id = user.Id,
+            Username = user.Username,
+            Role = user.Role,
+            Password = targetUser.Password
+        };
+        userRepository.Update(user.Id, updatedUser);
         return RedirectToAction("Index");
     }
 
@@ -68,5 +74,5 @@ public class UserController : Controller {
     }
 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool Logged() => HttpContext.Session != null; 
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
 }

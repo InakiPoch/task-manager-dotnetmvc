@@ -6,7 +6,7 @@
 @model LoginViewModel
 
 <h1>@ViewData["Title"]</h1>
-<form asp-controller="Login" asp-action="Login">
+<form asp-controller="Login" asp-action="Login" method="post">
     <div class="form-group">
         <label for="username">Nombre de usuario</label>
         <input asp-for = "@Model.Username" class="form-control" id="username">
