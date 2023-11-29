@@ -5,6 +5,8 @@ namespace tl2_tp10_2023_InakiPoch.ViewModels;
 public class GetTasksViewModel {
     public List<Tasks> Tasks { get; set; }
 
+    public GetTasksViewModel() {}
+
     public GetTasksViewModel(List<Tasks> tasks) {
         Tasks = tasks;
     }

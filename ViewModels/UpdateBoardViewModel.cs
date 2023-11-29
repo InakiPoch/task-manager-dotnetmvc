@@ -7,6 +7,8 @@ public class UpdateBoardViewModel {
     public string Name { get; set; }
     public string Description { get; set; }
 
+    public UpdateBoardViewModel() {}
+
     public UpdateBoardViewModel(Board board) {
         Id = board.Id;
         Name = board.Name;

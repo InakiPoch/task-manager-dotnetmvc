@@ -9,6 +9,9 @@ public class UpdateTaskViewModel {
     public string Description { get; set; }
     public string Color { get; set; }
 
+
+    public UpdateTaskViewModel() {}
+
     public UpdateTaskViewModel(Tasks task) {
         Id = task.Id;
         Name = task.Name;
