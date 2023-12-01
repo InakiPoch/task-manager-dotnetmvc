@@ -8,10 +8,10 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 
 public class TasksController : Controller {
     private readonly ILogger<TasksController> _logger;
-    TasksRepository tasksRepository;
+    private ITasksRepository tasksRepository;
 
-    public TasksController(ILogger<TasksController> logger) {
-        tasksRepository = new TasksRepository();
+    public TasksController(ILogger<TasksController> logger, ITasksRepository tasksRepository) {
+        this.tasksRepository = tasksRepository;
         _logger = logger;
     }
 
@@ -29,14 +29,18 @@ public class TasksController : Controller {
     [HttpPost]
     public IActionResult Add(AddTaskViewModel task) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        var newTask = new Tasks() {
-            Name = task.Name,
-            Description = task.Description,
-            State = TasksState.Ideas,
-            Color = task.Color,
-            BoardId = task.BoardId
-        };
-        tasksRepository.Add(newTask.BoardId, newTask);
+        try {
+            var newTask = new Tasks() {
+                Name = task.Name,
+                Description = task.Description,
+                State = TasksState.Ideas,
+                Color = task.Color,
+                BoardId = task.BoardId
+            };
+            tasksRepository.Add(newTask.BoardId, newTask);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -46,17 +50,21 @@ public class TasksController : Controller {
     [HttpPost]
     public IActionResult Update(UpdateTaskViewModel task) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        var targetTask = tasksRepository.GetAll().FirstOrDefault(t => t.Id == task.Id);
-        var updatedTask = new Tasks() {
-            Id = task.Id,
-            BoardId = targetTask.BoardId,
-            Name = task.Name,
-            State = task.State,
-            Description = task.Description,
-            Color = task.Color,
-            AssignedUserId = targetTask.AssignedUserId
-        };
-        tasksRepository.Update(task.Id, updatedTask);
+        try {
+            var targetTask = tasksRepository.GetById(task.Id);
+            var updatedTask = new Tasks() {
+                Id = task.Id,
+                BoardId = targetTask.BoardId,
+                Name = task.Name,
+                State = task.State,
+                Description = task.Description,
+                Color = task.Color,
+                AssignedUserId = targetTask.AssignedUserId
+            };
+            tasksRepository.Update(task.Id, updatedTask);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -64,7 +72,11 @@ public class TasksController : Controller {
     [HttpGet]
     public IActionResult Delete(int id) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        tasksRepository.Delete(id);
+        try {
+            tasksRepository.Delete(id);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -73,7 +85,7 @@ public class TasksController : Controller {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
  
 }

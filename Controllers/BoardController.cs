@@ -8,10 +8,10 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 
 public class BoardController : Controller {
     private readonly ILogger<BoardController> _logger;
-    BoardRepository boardRepository;
+    private IBoardRepository boardRepository;
 
-    public BoardController(ILogger<BoardController> logger) {
-        boardRepository = new BoardRepository();
+    public BoardController(ILogger<BoardController> logger, IBoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
         _logger = logger;
     }
 
@@ -34,7 +34,11 @@ public class BoardController : Controller {
             Description = board.Description,
             OwnerId = board.OwnerId
         };
-        boardRepository.Add(newBoard);
+        try {
+            boardRepository.Add(newBoard);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -44,14 +48,18 @@ public class BoardController : Controller {
     [HttpPost]
     public IActionResult Update(UpdateBoardViewModel board) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        var targetBoard = boardRepository.GetAll().FirstOrDefault(b => b.Id == board.Id);
-        var updatedBoard = new Board() {
-            Id = board.Id,
-            OwnerId = targetBoard.OwnerId,
-            Name = board.Name,
-            Description = board.Description
-        };
-        boardRepository.Update(board.Id, updatedBoard);
+        try {
+            var targetBoard = boardRepository.GetById(board.Id);
+            var updatedBoard = new Board() {
+                Id = board.Id,
+                OwnerId = targetBoard.OwnerId,
+                Name = board.Name,
+                Description = board.Description
+            };
+            boardRepository.Update(board.Id, updatedBoard);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -59,7 +67,11 @@ public class BoardController : Controller {
     [HttpGet]
     public IActionResult Delete(int id) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        boardRepository.Delete(id);
+        try {
+            boardRepository.Delete(id);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -69,5 +81,5 @@ public class BoardController : Controller {
     }
 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
 }

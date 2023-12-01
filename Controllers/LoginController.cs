@@ -8,10 +8,10 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 
 public class LoginController : Controller {
     private readonly ILogger<UserController> _logger;
-    UserRepository userRepository;
+    private IUserRepository userRepository;
 
-    public LoginController(ILogger<UserController> logger) {
-        userRepository = new UserRepository();
+    public LoginController(ILogger<UserController> logger, IUserRepository userRepository) {
+        this.userRepository = userRepository;
         _logger = logger;
     }
 
@@ -22,16 +22,23 @@ public class LoginController : Controller {
 
     [HttpPost]
     public IActionResult Login(LoginViewModel user) {
-        var loguedUser = userRepository.GetAll().FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
-        if(loguedUser == null) return RedirectToAction("Index");
-        LogUser(loguedUser);
-        return RedirectToRoute(new { controller = "User", action = "Index" });
-
+        try {
+            var loggedUser = userRepository.FindAccount(user.Username, user.Password);
+            LogUser(loggedUser);
+            _logger.LogInformation("User " + loggedUser.Username + " logged successfully");
+            return RedirectToRoute(new { controller = "User", action = "Index" });
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+            _logger.LogWarning(
+                "Invalid user loggin attempt - Username: " + user.Username + "/Password: " + user.Password
+            );
+            return RedirectToAction("Index");
+        }
     }
 
     private void LogUser(User user) {
         HttpContext.Session.SetString("Id", user.Id.ToString());
-        HttpContext.Session.SetString("Usuario", user.Username);
+        HttpContext.Session.SetString("User", user.Username);
         HttpContext.Session.SetString("Password", user.Password);
         HttpContext.Session.SetString("Role", Enum.GetName(user.Role));
     } 

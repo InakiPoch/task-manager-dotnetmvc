@@ -1,10 +1,16 @@
 using tl2_tp10_2023_InakiPoch.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace tl2_tp10_2023_InakiPoch.ViewModels;
 
 public class UpdateBoardViewModel {
+    [Required(ErrorMessage = "Campo requerido")]
     public int Id { get; set; }
+
+    [Required(ErrorMessage = "Campo requerido")]
     public string Name { get; set; }
+
+    [Required(ErrorMessage = "Campo requerido")]
     public string Description { get; set; }
 
     public UpdateBoardViewModel() {}

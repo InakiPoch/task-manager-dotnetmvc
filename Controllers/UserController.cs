@@ -8,10 +8,10 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 
 public class UserController : Controller {
     private readonly ILogger<UserController> _logger;
-    UserRepository userRepository;
+    private IUserRepository userRepository;
 
-    public UserController(ILogger<UserController> logger) {
-        userRepository = new UserRepository();
+    public UserController(ILogger<UserController> logger, IUserRepository userRepository) {
+        this.userRepository = userRepository;
         _logger = logger;
     }
 
@@ -30,12 +30,16 @@ public class UserController : Controller {
     [HttpPost]
     public IActionResult Add(AddUserViewModel user) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        var newUser = new User() {
-            Username = user.Username,
-            Password = user.Password,
-            Role = user.Role
-        };
-        userRepository.Add(newUser);
+        try {
+            var newUser = new User() {
+                Username = user.Username,
+                Password = user.Password,
+                Role = user.Role
+            };
+            userRepository.Add(newUser);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -48,14 +52,18 @@ public class UserController : Controller {
     [HttpPost]
     public IActionResult Update(UpdateUserViewModel user) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        var targetUser = userRepository.GetAll().FirstOrDefault(u => u.Id == user.Id);
-        var updatedUser = new User() {
-            Id = user.Id,
-            Username = user.Username,
-            Role = user.Role,
-            Password = targetUser.Password
-        };
-        userRepository.Update(user.Id, updatedUser);
+        try {
+            var targetUser = userRepository.GetById(user.Id);
+            var updatedUser = new User() {
+                Id = user.Id,
+                Username = user.Username,
+                Role = user.Role,
+                Password = targetUser.Password
+            };
+            userRepository.Update(user.Id, updatedUser);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -64,7 +72,11 @@ public class UserController : Controller {
     public IActionResult Delete(int id) {
         if(!UserIsAdmin()) return RedirectToAction("Index");
         if(!ModelState.IsValid) return RedirectToAction("Index");
-        userRepository.Delete(id);
+        try {
+            userRepository.Delete(id);  
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
         return RedirectToAction("Index");
     }
 
@@ -74,5 +86,5 @@ public class UserController : Controller {
     }
 
     private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario")); 
+    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
 }

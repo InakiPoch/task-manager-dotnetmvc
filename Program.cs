@@ -1,8 +1,17 @@
+using tl2_tp10_2023_InakiPoch.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+
+var connectionPath = builder.Configuration.GetConnectionString("boardConnection")!;
+builder.Services.AddSingleton<string>(connectionPath);
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromSeconds(300);
@@ -30,6 +39,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
