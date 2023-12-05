@@ -55,12 +55,13 @@ public class BoardRepository : IBoardRepository {
             query.Parameters.Add(new SQLiteParameter("@id", id));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
-                if(!reader.Read()) throw new Exception("Tablero no encontrado");
-                while(reader.Read()) {
+                if(reader.Read()) {
                     board.Id = Convert.ToInt32(reader["id"]);
                     board.Name = reader["name"].ToString();
                     board.Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString();
                     board.OwnerId = Convert.ToInt32(reader["board_owner_id"]);
+                } else {
+                    throw new Exception("Tablero no encontrado");
                 }
             }
             connection.Close();

@@ -88,8 +88,7 @@ public class TasksRepository : ITasksRepository {
             query.Parameters.Add(new SQLiteParameter("@id", id));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
-                if(!reader.Read()) throw new Exception("Tarea no encontrada");
-                while(reader.Read()) {
+                if(reader.Read()) {
                     task.Id = Convert.ToInt32(reader["id"]);
                     task.BoardId = Convert.ToInt32(reader["board_id"]);
                     task.Name = reader["name"].ToString();
@@ -101,6 +100,8 @@ public class TasksRepository : ITasksRepository {
                     } else {
                         task.AssignedUserId = null;
                     }
+                } else {
+                    throw new Exception("Tarea no encontrada");
                 }
             }
             connection.Close();
@@ -142,7 +143,6 @@ public class TasksRepository : ITasksRepository {
             query.Parameters.Add(new SQLiteParameter("@id", boardId));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
-                if(!reader.Read()) throw new Exception("La tarea no pertenece a ningun tablero"); 
                 while(reader.Read()) {
                     var task = new Tasks() {
                         Id = Convert.ToInt32(reader["id"]),
@@ -158,6 +158,8 @@ public class TasksRepository : ITasksRepository {
             }
             connection.Close();
         }
+        if(tasks.Count == 0)
+            throw new Exception("La tarea no pertenece a ningun tablero"); 
         return tasks;
     }
 

@@ -73,12 +73,13 @@ public class UserRepository : IUserRepository {
             query.Parameters.Add(new SQLiteParameter("@id", id));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
-                if(!reader.Read()) throw new Exception("Usuario no encontrado");
-                while(reader.Read()) {
+                if(reader.Read()) {
                     user.Id = Convert.ToInt32(reader["id"]);
                     user.Username = reader["username"].ToString();
                     user.Role = (Role)Convert.ToInt32(reader["role"]);
                     user.Password = reader["password"].ToString();
+                } else {
+                    throw new Exception("Usuario no encontrado");
                 }
             }
             connection.Close();
@@ -106,12 +107,13 @@ public class UserRepository : IUserRepository {
             query.Parameters.Add(new SQLiteParameter("@password", password));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
-                if(!reader.Read()) throw new Exception("Los campos no coinciden");
-                while(reader.Read()) {
+                if(reader.Read()) {
                     user.Id = Convert.ToInt32(reader["id"]);
                     user.Username = reader["username"].ToString();
                     user.Role = (Role)Convert.ToInt32(reader["role"]);
                     user.Password = reader["password"].ToString();
+                } else {
+                    throw new Exception("Los campos no coinciden");
                 }
             }
             connection.Close();
