@@ -9,21 +9,23 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 public class UserController : Controller {
     private readonly ILogger<UserController> _logger;
     private IUserRepository userRepository;
+    private RoleCheck roleCheck;
 
-    public UserController(ILogger<UserController> logger, IUserRepository userRepository) {
+    public UserController(ILogger<UserController> logger, IUserRepository userRepository, RoleCheck roleCheck) {
         this.userRepository = userRepository;
+        this.roleCheck = roleCheck;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Index() {
-        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         return View(new GetUsersViewModel(userRepository.GetAll()));
     }
 
     [HttpGet]
     public IActionResult Add() { 
-        if(!UserIsAdmin()) return RedirectToAction("Index");
+        if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
         return View(new AddUserViewModel());
     }
 
@@ -45,7 +47,7 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Update(int id) {
-        if(!UserIsAdmin()) return RedirectToAction("Index");
+        if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
         return View(new UpdateUserViewModel(userRepository.GetById(id)));
     }
 
@@ -70,7 +72,7 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Delete(int id) {
-        if(!UserIsAdmin()) return RedirectToAction("Index");
+        if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
         if(!ModelState.IsValid) return RedirectToAction("Index");
         try {
             userRepository.Delete(id);  
@@ -84,7 +86,4 @@ public class UserController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-
-    private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
 }

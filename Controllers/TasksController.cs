@@ -9,16 +9,18 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 public class TasksController : Controller {
     private readonly ILogger<TasksController> _logger;
     private ITasksRepository tasksRepository;
+    private RoleCheck roleCheck;
 
-    public TasksController(ILogger<TasksController> logger, ITasksRepository tasksRepository) {
+    public TasksController(ILogger<TasksController> logger, ITasksRepository tasksRepository, RoleCheck roleCheck) {
         this.tasksRepository = tasksRepository;
+        this.roleCheck = roleCheck;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Index() {
-        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        if(UserIsAdmin()) return View(new GetTasksViewModel(tasksRepository.GetAll()));
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        if(roleCheck.IsAdmin()) return View(new GetTasksViewModel(tasksRepository.GetAll()));
         var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
         return View(new GetTasksViewModel(tasksRepository.GetByUser(loggedUserId)));
     }
@@ -83,9 +85,5 @@ public class TasksController : Controller {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
-    private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
- 
+    } 
 }

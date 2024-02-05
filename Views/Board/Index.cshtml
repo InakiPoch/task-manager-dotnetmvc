@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
+@using tl2_tp10_2023_InakiPoch.Repositories
 @model GetBoardsViewModel
 
 <table class="table">
@@ -15,21 +17,66 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Board board in Model.Boards) {
-            <tr>
-                <td>@board.Id</td>
-                <td>@board.Name</td>
-                <td>@board.Description</td>
-                <td>@board.OwnerId</td>
-                <td>
-                    <button class="btn btn-primary">
-                        <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
-                    </button>
-                    <button class="btn btn-primary">
-                        <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
-                    </button>
-                </td>
-            </tr>
+        @if(Model.AssignedBoards.Any()) {
+            <th colspan="4">TABLEROS ASIGNADOS</th>
+            @foreach(Board board in Model.AssignedBoards) {
+                <tr>
+                    <td>@board.Id</td>
+                    <td>@board.Name</td>
+                    <td>@board.Description</td>
+                    <td>@board.OwnerId</td>
+                    <td>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                        </button>
+                        @if(roleCheck.IsAdmin()) {
+                            <button class="btn btn-primary">
+                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        @if(Model.AssignedTasksBoards.Any()) {
+            <th colspan="4">TABLEROS DE TAREAS ASIGNADOS</th>
+            @foreach(Board board in Model.AssignedTasksBoards) {
+                <tr>
+                    <td>@board.Id</td>
+                    <td>@board.Name</td>
+                    <td>@board.Description</td>
+                    <td>@board.OwnerId</td>
+                    <td>
+                        @if(roleCheck.IsAdmin()) {
+                            <button class="btn btn-primary">
+                                <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                            </button>
+                            <button class="btn btn-primary">
+                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        @if(Model.AllBoards.Any()) {
+            <th colspan="4">TABLEROS RESTANTES</th>
+            @foreach(Board board in Model.AllBoards) {
+                <tr>
+                    <td>@board.Id</td>
+                    <td>@board.Name</td>
+                    <td>@board.Description</td>
+                    <td>@board.OwnerId</td>
+                    <td>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                        </button>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                        </button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
     <button class="btn btn-outline-primary">

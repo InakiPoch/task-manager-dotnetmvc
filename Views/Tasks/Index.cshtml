@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
+@using tl2_tp10_2023_InakiPoch.Repositories
 @model GetTasksViewModel
 
 <table class="table">
@@ -29,9 +31,11 @@
                     <button class="btn btn-primary">
                         <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Update</a>
                     </button>
-                    <button class="btn btn-primary">
-                        <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Delete</a>
-                    </button>
+                    @if(roleCheck.IsAdmin()) {
+                        <button class="btn btn-primary">
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Delete</a>
+                        </button>
+                    }
                 </td>
             </tr>
         }

@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddHttpContextAccessor(); //Permite la inyeccion de HttpContextAccesor sobre RoleCheck
+
 var connectionPath = builder.Configuration.GetConnectionString("boardConnection")!;
 builder.Services.AddSingleton<string>(connectionPath);
 
@@ -19,7 +21,10 @@ builder.Services.AddSession(options => {
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<RoleCheck>();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -36,6 +41,13 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
+
+//Para acceder al rol de la sesion en una Razor View
+app.Use((context, next) =>
+{
+    context.Items["RoleCheck"] = context.RequestServices.GetRequiredService<RoleCheck>();
+    return next();
+});
 
 app.MapControllerRoute(
     name: "default",

@@ -9,18 +9,30 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 public class BoardController : Controller {
     private readonly ILogger<BoardController> _logger;
     private IBoardRepository boardRepository;
+    private RoleCheck roleCheck;
 
-    public BoardController(ILogger<BoardController> logger, IBoardRepository boardRepository) {
+    public BoardController(ILogger<BoardController> logger, IBoardRepository boardRepository, RoleCheck roleCheck) {
         this.boardRepository = boardRepository;
+        this.roleCheck = roleCheck;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Index() {
-        if(NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        if(UserIsAdmin()) return View(new GetBoardsViewModel(boardRepository.GetAll()));
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-        return View(new GetBoardsViewModel(boardRepository.GetByUser(loggedUserId)));
+        if(roleCheck.IsAdmin()) {
+            return View(new GetBoardsViewModel(
+                boardRepository.GetByUser(loggedUserId),
+                boardRepository.GetByTask(loggedUserId),
+                boardRepository.GetAll()
+            ));
+        }
+        return View(new GetBoardsViewModel(
+            boardRepository.GetByUser(loggedUserId), 
+            boardRepository.GetByTask(loggedUserId), 
+            new List<Board>()    
+        ));
     }
 
     [HttpGet]
@@ -79,7 +91,4 @@ public class BoardController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-
-    private bool UserIsAdmin() => HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    private bool NotLogged() => string.IsNullOrEmpty(HttpContext.Session.GetString("User")); 
 }

@@ -9,9 +9,11 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 public class LoginController : Controller {
     private readonly ILogger<UserController> _logger;
     private IUserRepository userRepository;
+    private RoleCheck roleCheck;
 
-    public LoginController(ILogger<UserController> logger, IUserRepository userRepository) {
+    public LoginController(ILogger<UserController> logger, IUserRepository userRepository, RoleCheck roleCheck) {
         this.userRepository = userRepository;
+        this.roleCheck = roleCheck;
         _logger = logger;
     }
 
@@ -26,6 +28,9 @@ public class LoginController : Controller {
             var loggedUser = userRepository.FindAccount(user.Username, user.Password);
             LogUser(loggedUser);
             _logger.LogInformation("User " + loggedUser.Username + " logged successfully");
+            if(!roleCheck.IsAdmin()) {
+                return RedirectToRoute(new { controller = "Tasks", action = "Index" });
+            }
             return RedirectToRoute(new { controller = "User", action = "Index" });
         } catch (Exception e) {
             _logger.LogError(e.ToString());

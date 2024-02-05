@@ -9,6 +9,7 @@ public interface IBoardRepository {
     Board GetById(int id);
     List<Board> GetAll();
     List<Board> GetByUser(int userId);
+    List<Board> GetByTask(int userId);
     void Delete(int id);
 }
 
@@ -93,6 +94,30 @@ public class BoardRepository : IBoardRepository {
 
     public List<Board> GetByUser(int userId) {
         string queryText = "SELECT * FROM board WHERE board_owner_id = @id";
+        List<Board> boards = new List<Board>();
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+            SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@id", userId));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                while(reader.Read()) {
+                    var board = new Board() {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Name = reader["name"].ToString(),
+                        Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString(),
+                        OwnerId = Convert.ToInt32(reader["board_owner_id"]),
+                    };
+                    boards.Add(board);
+                }
+            }
+            connection.Close();
+        }
+        return boards;
+    }
+
+    public List<Board> GetByTask(int userId) {
+        string queryText = "SELECT b.id, b.name, b.description, board_owner_id FROM task INNER JOIN board b " +
+                            "ON board_id = b.id WHERE assigned_user_id = @id";
         List<Board> boards = new List<Board>();
         using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
             SQLiteCommand query = new SQLiteCommand(queryText, connection);
