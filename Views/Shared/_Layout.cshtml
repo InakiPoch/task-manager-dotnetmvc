@@ -23,21 +23,28 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if(roleCheck.IsAdmin()) {
+                @if(!roleCheck.NotLogged()) {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if(roleCheck.IsAdmin()) {
+                                <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                </li>
+                            }
                             <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Board" asp-action="Index">Boards</a>
                             </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Board" asp-action="Index">Boards</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
-                        </li>
-                    </ul>
-                </div>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
+                            </li>
+                            @if(!roleCheck.NotLogged()) {
+                                <button class="btn btn-outline-primary">
+                                    <a asp-controller="Login" asp-action="Unlog" asp-route-loggedUserId="@roleCheck.LoggedUserId()">Desloguearse</a>
+                                </button>
+                            }
+                        </ul>
+                    </div>
+                }
             </div>
         </nav>
     </header>

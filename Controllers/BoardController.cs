@@ -36,7 +36,7 @@ public class BoardController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new AddBoardViewModel());
+    public IActionResult Add() => View(new AddBoardViewModel(roleCheck.LoggedUserId()));
 
     [HttpPost]
     public IActionResult Add(AddBoardViewModel board) {

@@ -9,16 +9,16 @@
 
 <table class="table">
     <thead class="thead-dark">
-        <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Owner ID</th>
-        </tr>
     </thead>
     <tbody>
         @if(Model.AssignedBoards.Any()) {
             <th colspan="4">TABLEROS ASIGNADOS</th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Owner ID</th>
+            </tr>
             @foreach(Board board in Model.AssignedBoards) {
                 <tr>
                     <td>@board.Id</td>
@@ -40,6 +40,12 @@
         }
         @if(Model.AssignedTasksBoards.Any()) {
             <th colspan="4">TABLEROS DE TAREAS ASIGNADOS</th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Owner ID</th>
+            </tr>
             @foreach(Board board in Model.AssignedTasksBoards) {
                 <tr>
                     <td>@board.Id</td>
@@ -61,6 +67,12 @@
         }
         @if(Model.AllBoards.Any()) {
             <th colspan="4">TABLEROS RESTANTES</th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Owner ID</th>
+            </tr>
             @foreach(Board board in Model.AllBoards) {
                 <tr>
                     <td>@board.Id</td>
@@ -79,7 +91,8 @@
             }
         }
     </tbody>
+    @* So both admin and operators can only create boards for them and only them *@
     <button class="btn btn-outline-primary">
-        <a asp-controller="Board" asp-action="Add">Add Board</a>
+        <a asp-controller="Board" asp-action="Add" asp-route-id="@roleCheck.LoggedUserId()">Add Board</a>
     </button>
 </table>

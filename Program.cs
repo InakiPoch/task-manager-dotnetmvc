@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddHttpContextAccessor(); //Permite la inyeccion de HttpContextAccesor sobre RoleCheck
+builder.Services.AddHttpContextAccessor(); //Allows HttpContextAccesor dependency inyection over RoleCheck
 
 var connectionPath = builder.Configuration.GetConnectionString("boardConnection")!;
 builder.Services.AddSingleton<string>(connectionPath);
@@ -42,7 +42,7 @@ app.UseSession();
 
 app.UseAuthorization();
 
-//Para acceder al rol de la sesion en una Razor View
+//To access session's role on a Razor View
 app.Use((context, next) =>
 {
     context.Items["RoleCheck"] = context.RequestServices.GetRequiredService<RoleCheck>();

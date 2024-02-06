@@ -2,13 +2,16 @@ using tl2_tp10_2023_InakiPoch.Models;
 
 namespace tl2_tp10_2023_InakiPoch.Repositories;
 
-public class RoleCheck {
-    private IHttpContextAccessor accesor;
 
-    public RoleCheck(IHttpContextAccessor accesor) {
-        this.accesor = accesor;
+//Provides methods to check session's settings. Made non-static to access it on a View 
+public class RoleCheck {
+    private IHttpContextAccessor accessor;
+
+    public RoleCheck(IHttpContextAccessor accessor) {
+        this.accessor = accessor;
     }
 
-    public bool IsAdmin() => accesor.HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
-    public bool NotLogged() => string.IsNullOrEmpty(accesor.HttpContext.Session.GetString("User")); 
+    public bool IsAdmin() => accessor.HttpContext.Session.GetString("Role") == Enum.GetName(Role.Admin);
+    public bool NotLogged() => string.IsNullOrEmpty(accessor.HttpContext.Session.GetString("User")); 
+    public int LoggedUserId() => Convert.ToInt32(accessor.HttpContext.Session.GetString("Id"));
 }

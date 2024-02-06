@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio de Sesion";
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
@@ -10,10 +10,12 @@
     <div class="form-group">
         <label for="username">Nombre de usuario</label>
         <input asp-for = "@Model.Username" class="form-control" id="username">
+        <span asp-validation-for="@Model.Username" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="pass">Password</label>
-        <input asp-for = "@Model.Password" class="form-control" id="pass">
+        <label for="pass">Clave</label>
+        <input asp-for="@Model.Password" type="password" class="form-control" id="pass">
+        <span asp-validation-for="@Model.Password" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Ingresar</button>
 </form>
