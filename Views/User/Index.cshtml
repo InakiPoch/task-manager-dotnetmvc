@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Usuarios";
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
@@ -9,7 +9,7 @@
     <thead class="thead-dark">
         <tr>
         <th scope="col">Id</th>
-        <th scope="col">Username</th>
+        <th scope="col">Usuario</th>
         <th scope="col">Rol</th>
         </tr>
     </thead>
@@ -21,16 +21,16 @@
                 <td>@Enum.GetName(user.Role)</td>
                 <td>
                     <button class="btn btn-primary">
-                        <a asp-controller="User" asp-action="Update" asp-route-id="@user.Id" class="badge badge-primary">Update</a>
+                        <a asp-controller="User" asp-action="Update" asp-route-id="@user.Id" class="badge badge-primary">Actualizar</a>
                     </button>
                     <button class="btn btn-primary">
-                        <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="badge badge-primary">Delete</a>
+                        <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="badge badge-primary">Borrar</a>
                     </button>
                 </td>
             </tr>
         }
     </tbody>
     <button class="btn btn-outline-primary">
-        <a asp-controller="User" asp-action="Add">Add User</a>
+        <a asp-controller="User" asp-action="Add">Crear usuario</a>
     </button>
 </table>

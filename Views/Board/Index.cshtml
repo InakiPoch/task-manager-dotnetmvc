@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Tableros";
     var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
 }
 
@@ -15,9 +15,9 @@
             <th colspan="4">TABLEROS ASIGNADOS</th>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Owner ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">ID del Propietario</th>
             </tr>
             @foreach(Board board in Model.AssignedBoards) {
                 <tr>
@@ -27,11 +27,11 @@
                     <td>@board.OwnerId</td>
                     <td>
                         <button class="btn btn-primary">
-                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
                             <button class="btn btn-primary">
-                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                             </button>
                         }
                     </td>
@@ -42,9 +42,9 @@
             <th colspan="4">TABLEROS DE TAREAS ASIGNADOS</th>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Owner ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">ID del Propietario</th>
             </tr>
             @foreach(Board board in Model.AssignedTasksBoards) {
                 <tr>
@@ -55,10 +55,10 @@
                     <td>
                         @if(roleCheck.IsAdmin()) {
                             <button class="btn btn-primary">
-                                <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                                <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                             </button>
                             <button class="btn btn-primary">
-                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                             </button>
                         }
                     </td>
@@ -66,12 +66,12 @@
             }
         }
         @if(Model.AllBoards.Any()) {
-            <th colspan="4">TABLEROS RESTANTES</th>
+            <th colspan="4">TODOS LOS TABLEROS</th>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Owner ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">ID del Propietario</th>
             </tr>
             @foreach(Board board in Model.AllBoards) {
                 <tr>
@@ -81,10 +81,10 @@
                     <td>@board.OwnerId</td>
                     <td>
                         <button class="btn btn-primary">
-                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Update</a>
+                            <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         <button class="btn btn-primary">
-                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Delete</a>
+                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                         </button>
                     </td>
                 </tr>
@@ -93,6 +93,6 @@
     </tbody>
     @* So both admin and operators can only create boards for them and only them *@
     <button class="btn btn-outline-primary">
-        <a asp-controller="Board" asp-action="Add" asp-route-id="@roleCheck.LoggedUserId()">Add Board</a>
+        <a asp-controller="Board" asp-action="Add" asp-route-id="@roleCheck.LoggedUserId()">Crear Tablero</a>
     </button>
 </table>

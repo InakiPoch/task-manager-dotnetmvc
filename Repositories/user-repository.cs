@@ -20,11 +20,12 @@ public class UserRepository : IUserRepository {
     }
 
     public void Add(User user) {
-        string queryText = "INSERT INTO user (username, role) VALUES (@username, @role)";
+        string queryText = "INSERT INTO user (username, role, password) VALUES (@username, @role, @password)";
         using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
             SQLiteCommand query = new SQLiteCommand(queryText, connection);
             query.Parameters.Add(new SQLiteParameter("@username", user.Username));
             query.Parameters.Add(new SQLiteParameter("@role", user.Role));
+            query.Parameters.Add(new SQLiteParameter("@password", user.Password));
             connection.Open();
             query.ExecuteNonQuery();
             connection.Close();

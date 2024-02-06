@@ -28,14 +28,14 @@
                         <ul class="navbar-nav flex-grow-1">
                             @if(roleCheck.IsAdmin()) {
                                 <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Usuarios</a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Board" asp-action="Index">Boards</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Board" asp-action="Index">Tableros</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tasks</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tareas</a>
                             </li>
                             @if(!roleCheck.NotLogged()) {
                                 <button class="btn btn-outline-primary">

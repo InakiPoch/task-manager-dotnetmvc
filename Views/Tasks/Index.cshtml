@@ -10,12 +10,12 @@
 <table class="table">
     <thead class="thead-dark">
         <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Color</th>
-        <th scope="col">State</th>
-        <th scope="col">Board ID</th>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Color</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Tablero al que pertenece</th>
         </tr>
     </thead>
     <tbody>
@@ -29,11 +29,11 @@
                 <td>@task.BoardId</td>
                 <td>
                     <button class="btn btn-primary">
-                        <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Update</a>
+                        <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
                     </button>
                     @if(roleCheck.IsAdmin()) {
                         <button class="btn btn-primary">
-                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Delete</a>
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
                         </button>
                     }
                 </td>
@@ -41,6 +41,6 @@
         }
     </tbody>
     <button class="btn btn-outline-primary">
-        <a asp-controller="Tasks" asp-action="Add">Add Task</a>
+        <a asp-controller="Tasks" asp-action="Add">Crear Tarea</a>
     </button>
 </table>

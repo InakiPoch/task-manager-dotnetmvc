@@ -1,5 +1,5 @@
 ﻿@{ 
-    ViewData["Title"] = "Add Task";
+    ViewData["Title"] = "Crear Tarea";
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
@@ -23,7 +23,7 @@
         <label for="board-id">ID del tablero al que pertenece</label>
         <input asp-for = "@Model.BoardId" class="form-control" id="board-id">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Crear</button>
 </form>
 
 @section Scripts{<partial name="_ValidationScriptsPartial"/>}
