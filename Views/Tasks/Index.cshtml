@@ -7,8 +7,8 @@
 @using tl2_tp10_2023_InakiPoch.Repositories
 @model GetTasksViewModel
 
-<table class="table">
-    <thead class="thead-dark">
+<table class="table table-striped table-dark text-center">
+    <thead>
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Nombre</th>
@@ -16,6 +16,7 @@
             <th scope="col">Color</th>
             <th scope="col">Estado</th>
             <th scope="col">Tablero al que pertenece</th>
+            <th scope="col">Opcion</th>
         </tr>
     </thead>
     <tbody>
@@ -28,11 +29,11 @@
                 <td>@Enum.GetName(task.State)</td>
                 <td>@task.BoardId</td>
                 <td>
-                    <button class="btn btn-primary">
+                    <button class="btn btn-success">
                         <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
                     </button>
                     @if(roleCheck.IsAdmin()) {
-                        <button class="btn btn-primary">
+                        <button class="btn btn-success">
                             <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
                         </button>
                     }
@@ -40,7 +41,7 @@
             </tr>
         }
     </tbody>
-    <button class="btn btn-outline-primary">
+    <button class="btn btn-outline-dark">
         <a asp-controller="Tasks" asp-action="Add">Crear Tarea</a>
     </button>
 </table>

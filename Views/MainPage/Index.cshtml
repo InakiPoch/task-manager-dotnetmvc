@@ -1,0 +1,31 @@
+@{
+    var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
+}
+
+@using tl2_tp10_2023_InakiPoch.Repositories;
+@using tl2_tp10_2023_InakiPoch.ViewModels;
+@model MainPageViewModel;
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3 mb-5 text-center">Gestion de Tareas</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="d-flex justify-content-around">
+        @if(roleCheck.IsAdmin()) {
+            <div class="col-md-4 text-center">
+                <h2>Total Usuarios</h2>
+                <p>@Model.TotalUsers</p>
+            </div>
+        }
+        <div class="col-md-4 text-center">
+            <h2>Total Tareas</h2>
+            <p>@Model.TotalTasks</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <h2>Total Tableros</h2>
+            <p>@Model.TotalBoards</p>
+        </div>
+    </div>
+</div>

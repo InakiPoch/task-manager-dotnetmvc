@@ -28,10 +28,7 @@ public class LoginController : Controller {
             var loggedUser = userRepository.FindAccount(user.Username, user.Password);
             LogUser(loggedUser);
             _logger.LogInformation("User " + loggedUser.Username + " logged successfully");
-            if(!roleCheck.IsAdmin()) {
-                return RedirectToRoute(new { controller = "Tasks", action = "Index" });
-            }
-            return RedirectToRoute(new { controller = "User", action = "Index" });
+            return RedirectToRoute(new { controller = "MainPage", action = "Index" });
         } catch (Exception e) {
             _logger.LogError(e.ToString());
             _logger.LogWarning(
@@ -51,7 +48,7 @@ public class LoginController : Controller {
         } catch (Exception e) {
             _logger.LogError(e.ToString());
             _logger.LogWarning("Couldn't unlog user");
-            return RedirectToRoute(new { controller = "Tasks", action = "Index"});
+            return RedirectToRoute(new { controller = "MainPage", action = "Index"});
         }
     }
 

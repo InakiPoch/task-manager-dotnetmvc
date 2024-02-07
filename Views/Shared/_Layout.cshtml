@@ -1,5 +1,6 @@
 ﻿@{
     var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
+    ViewData["Title"] = "Proyecto";
 }
 
 @using tl2_tp10_2023_InakiPoch.Repositories;
@@ -9,54 +10,53 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - tl2_tp10_2023_InakiPoch</title>
+    <title>@ViewData["Title"] - Gestion de Tareas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/tl2_tp10_2023_InakiPoch.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Index">tl2_tp10_2023_InakiPoch</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                @if(!roleCheck.NotLogged()) {
+        @if(!roleCheck.NotLogged()) {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="MainPage" asp-action="Index">Gestion de Tareas</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             @if(roleCheck.IsAdmin()) {
                                 <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Usuarios</a>
+                                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Index">Usuarios</a>
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Board" asp-action="Index">Tableros</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Board" asp-action="Index">Tableros</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Tareas</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Tasks" asp-action="Index">Tareas</a>
                             </li>
-                            @if(!roleCheck.NotLogged()) {
-                                <button class="btn btn-outline-primary">
-                                    <a asp-controller="Login" asp-action="Unlog" asp-route-loggedUserId="@roleCheck.LoggedUserId()">Desloguearse</a>
-                                </button>
-                            }
                         </ul>
+                        <button class="btn btn-outline-light flex-row-reverse">
+                            <a asp-controller="Login" asp-action="Unlog" asp-route-loggedUserId="@roleCheck.LoggedUserId()">Desloguearse</a>
+                        </button>
                     </div>
-                }
-            </div>
-        </nav>
+                </div>
+            </nav>
+        } else {
+            <h1>Bienvenido!</h1>
+        }
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 d-flex flex-column min-vh-100 justify-content-center allign-items-center">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted fixed-bottom">
         <div class="container">
-            &copy; 2023 - tl2_tp10_2023_InakiPoch - <a asp-area="" asp-controller="User" asp-action="Privacy">Privacy</a>
+            <p>&copy; 2024 - Poch Inaki</p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
