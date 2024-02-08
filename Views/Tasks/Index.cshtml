@@ -10,35 +10,108 @@
 <table class="table table-striped table-dark text-center">
     <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Color</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Tablero al que pertenece</th>
-            <th scope="col">Opcion</th>
+            <th colspan="7">LISTA DE TAREAS</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(Tasks task in Model.Tasks) {
+        @if(Model.OwnedTasks.Any()) {
+            <th colspan="7" class="text-center">TAREAS PROPIAS</th>
             <tr>
-                <td>@task.Id</td>
-                <td>@task.Name</td>
-                <td>@task.Description</td>
-                <td>@task.Color</td>
-                <td>@Enum.GetName(task.State)</td>
-                <td>@task.BoardId</td>
-                <td>
-                    <button class="btn btn-success">
-                        <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
-                    </button>
-                    @if(roleCheck.IsAdmin()) {
-                        <button class="btn btn-success">
-                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
-                        </button>
-                    }
-                </td>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Color</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Tablero al que pertenece</th>
+                <th scope="col">Opcion</th>
             </tr>
+            @foreach(Tasks task in Model.OwnedTasks) {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>@task.Color</td>
+                    <td>@Enum.GetName(task.State)</td>
+                    <td>@task.BoardId</td>
+                    <td>
+                        <button class="btn btn-success">
+                            <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
+                        </button>
+                        <button class="btn btn-success">
+                            <a asp-controller="Tasks" asp-action="AssignTask" asp-route-taskId="@task.Id" class="badge badge-primary">Asignar</a>
+                        </button>
+                        @if(roleCheck.IsAdmin()) {
+                            <button class="btn btn-success">
+                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        @if(Model.AssignedTasks.Any()) {
+            <th colspan="7" class="text-center">TAREAS ASIGNADAS</th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Color</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Tablero al que pertenece</th>
+                <th scope="col">Opcion</th>
+            </tr>
+            @foreach(Tasks task in Model.AssignedTasks) {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>@task.Color</td>
+                    <td>@Enum.GetName(task.State)</td>
+                    <td>@task.BoardId</td>
+                    <td>
+                        <button class="btn btn-success">
+                            <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
+                        </button>
+                        @if(roleCheck.IsAdmin()) {
+                            <button class="btn btn-success">
+                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        @if(Model.AllTasks.Any()) {
+            <th colspan="7" class="text-center">TODAS LAS TAREAS</th>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Color</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Tablero al que pertenece</th>
+                <th scope="col">Opcion</th>
+            </tr>
+            @foreach(Tasks task in Model.AllTasks) {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>@task.Color</td>
+                    <td>@Enum.GetName(task.State)</td>
+                    <td>@task.BoardId</td>
+                    <td>
+                        <button class="btn btn-success">
+                            <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
+                        </button>
+                        @if(roleCheck.IsAdmin()) {
+                            <button class="btn btn-success">
+                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
     <button class="btn btn-outline-dark">

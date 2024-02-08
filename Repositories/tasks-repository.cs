@@ -8,6 +8,7 @@ public interface ITasksRepository {
     void Add(int boardId, Tasks task);
     void Update(int id, Tasks task);
     Tasks GetById(int id);
+    List<Tasks> GetByAssigned(int userId);
     List<Tasks> GetByUser(int userId);
     List<Tasks> GetByBoard(int boardId);
     void Delete(int id);
@@ -109,8 +110,35 @@ public class TasksRepository : ITasksRepository {
         return task;
     }
 
-    public List<Tasks> GetByUser(int userId) {
+    public List<Tasks> GetByAssigned(int userId) {
         string queryText = "SELECT * FROM task WHERE assigned_user_id = @id";
+        List<Tasks> tasks = new List<Tasks>();
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+            SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@id", userId));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                while(reader.Read()) {
+                    var task = new Tasks() {
+                        Id = Convert.ToInt32(reader["id"]),
+                        BoardId = Convert.ToInt32(reader["board_id"]),
+                        Name = reader["name"].ToString(),
+                        State = (TasksState)Convert.ToInt32(reader["state"]),
+                        Description = reader["description"].ToString(),
+                        Color = reader["color"].ToString(),
+                        AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
+                    };
+                    tasks.Add(task);
+                }
+            }
+            connection.Close();
+        }
+        return tasks;
+    }
+
+    public List<Tasks> GetByUser(int userId) {
+        string queryText = "SELECT t.id, t.name, t.description, color, state, board_id, assigned_user_id FROM task t " +
+                            "INNER JOIN board b ON board_id = b.id WHERE board_owner_id = @id";
         List<Tasks> tasks = new List<Tasks>();
         using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
             SQLiteCommand query = new SQLiteCommand(queryText, connection);

@@ -20,17 +20,16 @@ public class BoardController : Controller {
     [HttpGet]
     public IActionResult Index() {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
         if(roleCheck.IsAdmin()) {
             return View(new GetBoardsViewModel(
-                boardRepository.GetByUser(loggedUserId),
-                boardRepository.GetByTask(loggedUserId),
+                boardRepository.GetByUser(roleCheck.LoggedUserId()),
+                boardRepository.GetByTask(roleCheck.LoggedUserId()),
                 boardRepository.GetAll()
             ));
         }
         return View(new GetBoardsViewModel(
-            boardRepository.GetByUser(loggedUserId), 
-            boardRepository.GetByTask(loggedUserId), 
+            boardRepository.GetByUser(roleCheck.LoggedUserId()), 
+            boardRepository.GetByTask(roleCheck.LoggedUserId()), 
             new List<Board>()    
         ));
     }

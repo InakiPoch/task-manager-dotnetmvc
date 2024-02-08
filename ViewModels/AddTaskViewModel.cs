@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace tl2_tp10_2023_InakiPoch.ViewModels;
 
 public class AddTaskViewModel {
+    public List<Board> BoardsAvailable { get; set; }
+
     [Required(ErrorMessage = "Campo requerido")]
     public int BoardId { get; set; }
 
@@ -17,5 +19,9 @@ public class AddTaskViewModel {
     public string Color { get; set; }
 
     public AddTaskViewModel() {}
+
+    public AddTaskViewModel(List<Board> boardsAvailable) {
+        BoardsAvailable = boardsAvailable;
+    }
 
 }

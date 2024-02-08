@@ -8,6 +8,7 @@ public interface IUserRepository {
     void Update(int id, User user);
     List<User> GetAll();
     User GetById(int id);
+    User GetByUsername(string username);
     void Delete(int id);
     User FindAccount(string username, string password);
 }
@@ -72,6 +73,28 @@ public class UserRepository : IUserRepository {
         using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
             SQLiteCommand query = new SQLiteCommand(queryText, connection);
             query.Parameters.Add(new SQLiteParameter("@id", id));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                if(reader.Read()) {
+                    user.Id = Convert.ToInt32(reader["id"]);
+                    user.Username = reader["username"].ToString();
+                    user.Role = (Role)Convert.ToInt32(reader["role"]);
+                    user.Password = reader["password"].ToString();
+                } else {
+                    throw new Exception("Usuario no encontrado");
+                }
+            }
+            connection.Close();
+        }
+        return user;
+    }
+
+    public User GetByUsername(string username) {
+        string queryText = "SELECT * FROM user WHERE username = @username";
+        User user = new User();
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+            SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@username", username));
             connection.Open();
             using(SQLiteDataReader reader = query.ExecuteReader()) {
                 if(reader.Read()) {

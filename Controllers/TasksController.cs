@@ -9,10 +9,15 @@ namespace tl2_tp10_2023_InakiPoch.Controllers;
 public class TasksController : Controller {
     private readonly ILogger<TasksController> _logger;
     private ITasksRepository tasksRepository;
+    private IBoardRepository boardRepository;
+    private IUserRepository userRepository;
     private RoleCheck roleCheck;
 
-    public TasksController(ILogger<TasksController> logger, ITasksRepository tasksRepository, RoleCheck roleCheck) {
+    public TasksController(ILogger<TasksController> logger, ITasksRepository tasksRepository, IBoardRepository boardRepository, 
+                            IUserRepository userRepository, RoleCheck roleCheck) {
         this.tasksRepository = tasksRepository;
+        this.boardRepository = boardRepository;
+        this.userRepository = userRepository;
         this.roleCheck = roleCheck;
         _logger = logger;
     }
@@ -20,13 +25,22 @@ public class TasksController : Controller {
     [HttpGet]
     public IActionResult Index() {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        if(roleCheck.IsAdmin()) return View(new GetTasksViewModel(tasksRepository.GetAll()));
-        var loggedUserId = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-        return View(new GetTasksViewModel(tasksRepository.GetByUser(loggedUserId)));
+        if(roleCheck.IsAdmin()) {
+            return View(new GetTasksViewModel(
+                tasksRepository.GetByUser(roleCheck.LoggedUserId()),
+                tasksRepository.GetByAssigned(roleCheck.LoggedUserId()),
+                tasksRepository.GetAll()
+            ));
+        }
+        return View(new GetTasksViewModel(
+            tasksRepository.GetByUser(roleCheck.LoggedUserId()), 
+            tasksRepository.GetByAssigned(roleCheck.LoggedUserId()), 
+            new List<Tasks>()    
+        ));
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new AddTaskViewModel());
+    public IActionResult Add() => View(new AddTaskViewModel(boardRepository.GetByUser(roleCheck.LoggedUserId())));
 
     [HttpPost]
     public IActionResult Add(AddTaskViewModel task) {
@@ -70,6 +84,21 @@ public class TasksController : Controller {
         return RedirectToAction("Index");
     }
 
+    [HttpGet]
+    public IActionResult AssignTask(int taskId) => View(new AssignTaskViewModel(taskId));        
+
+    [HttpPost]
+    public IActionResult AssignTask(AssignTaskViewModel task) {
+        if(!ModelState.IsValid) return RedirectToAction("Index");
+        try {
+            var user = userRepository.GetByUsername(task.Username);
+            tasksRepository.AssignTask(user.Id, task.TaskId);
+        } catch (Exception e) {
+            _logger.LogError(e.ToString());
+        }
+        return RedirectToAction("Index");
+        
+    }
 
     [HttpGet]
     public IActionResult Delete(int id) {

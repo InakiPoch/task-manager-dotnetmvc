@@ -1,0 +1,18 @@
+@{ 
+    ViewData["Title"] = "Asignar Tarea";
+}
+
+@using tl2_tp10_2023_InakiPoch.ViewModels
+@model AssignTaskViewModel
+
+<h1>@ViewData["Title"]</h1>
+<form asp-controller="Tasks" asp-action="AssignTask">
+    <input hidden asp-for = "@Model.TaskId">
+    <div class="form-group">
+        <label for="username">Usuario al Asignar la Tarea</label>
+        <input asp-for = "@Model.Username" class="form-control" id="username">
+    </div>
+    <button type="submit" class="btn btn-primary">Asignar</button>
+</form>
+
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
