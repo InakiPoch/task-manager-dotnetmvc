@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace tl2_tp10_2023_InakiPoch.ViewModels;
 
 public class UpdateTaskViewModel {
+    public bool IsOwner { get; set; }
+
     [Required(ErrorMessage = "Campo requerido")]
     public int Id { get; set; }
 
@@ -22,11 +24,12 @@ public class UpdateTaskViewModel {
 
     public UpdateTaskViewModel() {}
 
-    public UpdateTaskViewModel(Tasks task) {
+    public UpdateTaskViewModel(Tasks task, bool isOwner) {
         Id = task.Id;
         Name = task.Name;
         State = task.State;
         Description = task.Description;
         Color = task.Color;
+        IsOwner = isOwner;
     }
 }

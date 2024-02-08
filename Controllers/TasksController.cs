@@ -61,7 +61,15 @@ public class TasksController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Update(int id) => View(new UpdateTaskViewModel(tasksRepository.GetById(id)));
+    public IActionResult Update(int id) {
+        var task = tasksRepository.GetById(id);
+        var userBoards = boardRepository.GetByUser(roleCheck.LoggedUserId());
+        foreach(Board board in userBoards) {
+            if(board.Id == task.BoardId)
+                return View(new UpdateTaskViewModel(task, true));
+        }
+        return View(new UpdateTaskViewModel(task, false));
+    }
 
     [HttpPost]
     public IActionResult Update(UpdateTaskViewModel task) {
