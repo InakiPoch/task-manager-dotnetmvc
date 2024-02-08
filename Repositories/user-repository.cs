@@ -11,6 +11,7 @@ public interface IUserRepository {
     User GetByUsername(string username);
     void Delete(int id);
     User FindAccount(string username, string password);
+    bool UserExists(User user);
 }
 
 public class UserRepository : IUserRepository {
@@ -143,5 +144,22 @@ public class UserRepository : IUserRepository {
             connection.Close();
         }
         return user;
+    }
+
+    public bool UserExists(User user) {
+        string queryText = "SELECT * FROM user WHERE username = @username";
+        bool exists = false;
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+            SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@username", user.Username));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                if(reader.Read()) {
+                    exists = true;
+                }
+            }
+            connection.Close();
+        }
+        return exists;
     }
 }

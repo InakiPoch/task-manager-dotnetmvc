@@ -38,6 +38,9 @@ public class UserController : Controller {
                 Password = user.Password,
                 Role = user.Role
             };
+            if(userRepository.UserExists(newUser)) {
+                throw new Exception("Usuario ya existe");
+            }
             userRepository.Add(newUser);
         } catch (Exception e) {
             _logger.LogError(e.ToString());
