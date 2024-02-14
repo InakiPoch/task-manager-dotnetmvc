@@ -73,6 +73,7 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
             }
@@ -96,6 +97,7 @@ public class TasksRepository : ITasksRepository {
                     task.State = (TasksState)Convert.ToInt32(reader["state"]);
                     task.Description = reader["description"].ToString();
                     task.Color = reader["color"].ToString();
+                    task.BoardName = GetBoardName(task.BoardId);
                     if(reader["assigned_user_id"] != DBNull.Value) {
                         task.AssignedUserId = Convert.ToInt32(reader["assigned_user_id"]);
                     } else {
@@ -128,6 +130,7 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
             }
@@ -155,6 +158,7 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
             }
@@ -181,6 +185,7 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"])
                     };
+                    task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
             }
@@ -212,5 +217,11 @@ public class TasksRepository : ITasksRepository {
             query.ExecuteNonQuery();
             connection.Close();
         }
+    }
+
+    private string GetBoardName(int id) {
+        BoardRepository boardRepository = new BoardRepository(connectionPath);
+        Board board = boardRepository.GetById(id);
+        return board.Name;
     }
 }

@@ -61,6 +61,7 @@ public class BoardRepository : IBoardRepository {
                     board.Name = reader["name"].ToString();
                     board.Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString();
                     board.OwnerId = Convert.ToInt32(reader["board_owner_id"]);
+                    board.OwnerName = GetUserName(board.OwnerId);
                 } else {
                     throw new Exception("Tablero no encontrado");
                 }
@@ -82,8 +83,9 @@ public class BoardRepository : IBoardRepository {
                         Id = Convert.ToInt32(reader["id"]),
                         Name = reader["name"].ToString(),
                         Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString(),
-                        OwnerId = Convert.ToInt32(reader["board_owner_id"])
+                        OwnerId = Convert.ToInt32(reader["board_owner_id"]),
                     };
+                    board.OwnerName = GetUserName(board.OwnerId);
                     boards.Add(board);
                 }
             }
@@ -107,6 +109,7 @@ public class BoardRepository : IBoardRepository {
                         Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString(),
                         OwnerId = Convert.ToInt32(reader["board_owner_id"]),
                     };
+                    board.OwnerName = GetUserName(board.OwnerId);
                     boards.Add(board);
                 }
             }
@@ -131,6 +134,7 @@ public class BoardRepository : IBoardRepository {
                         Description = reader["description"] == DBNull.Value ? null : reader["description"].ToString(),
                         OwnerId = Convert.ToInt32(reader["board_owner_id"]),
                     };
+                    board.OwnerName = GetUserName(board.OwnerId);
                     boards.Add(board);
                 }
             }
@@ -148,5 +152,11 @@ public class BoardRepository : IBoardRepository {
             query.ExecuteNonQuery();
             connection.Close();
         }
+    }
+
+    private string GetUserName(int id) {
+        UserRepository userRepository = new UserRepository(connectionPath);
+        User user = userRepository.GetById(id);
+        return user.Username;
     }
 }
