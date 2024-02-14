@@ -11,17 +11,20 @@ public class MainPageController : Controller {
     private IUserRepository userRepository;
     private ITasksRepository tasksRepository;
     private IBoardRepository boardRepository;
+    private RoleCheck roleCheck;
 
     public MainPageController(ILogger<UserController> logger, IUserRepository userRepository, ITasksRepository tasksRepository, 
-                                IBoardRepository boardRepository) {
+                                IBoardRepository boardRepository, RoleCheck roleCheck) {
         this.userRepository = userRepository;
         this.tasksRepository = tasksRepository;
         this.boardRepository = boardRepository;
+        this.roleCheck = roleCheck;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Index() {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
         int totalTasks = tasksRepository.GetAll().Count;
         int totalBoards = boardRepository.GetAll().Count;
         int totalUsers = userRepository.GetAll().Count;

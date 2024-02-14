@@ -5,18 +5,22 @@
 @using tl2_tp10_2023_InakiPoch.ViewModels
 @model AddBoardViewModel
 
-<h1>@ViewData["Title"]</h1>
-<form asp-controller="Board" asp-action="Add">
-    <input hidden asp-for="@Model.OwnerId">
-    <div class="form-group">
-        <label for="name">Nombre del tablero</label>
-        <input asp-for = "@Model.Name" class="form-control" id="name" required>
+<div class="container">
+    <div class="row col-md-6 mx-auto" style="margin-top: -150px;">
+        <h1>@ViewData["Title"]</h1>
+        <form asp-controller="Board" asp-action="Add">
+            <input hidden asp-for="@Model.OwnerId">
+            <div class="form-group">
+                <label for="name">Nombre del tablero</label>
+                <input asp-for = "@Model.Name" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descripcion</label>
+                <input asp-for = "@Model.Description" class="form-control" id="description">
+            </div>
+            <button type="submit" class="btn btn-primary mx-auto mt-3">Crear</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="description">Descripcion</label>
-        <input asp-for = "@Model.Description" class="form-control" id="description">
-    </div>
-    <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+</div>
 
 @section Scripts{<partial name="_ValidationScriptsPartial"/>}

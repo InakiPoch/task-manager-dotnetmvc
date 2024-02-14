@@ -40,7 +40,10 @@ public class TasksController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new AddTaskViewModel(boardRepository.GetByUser(roleCheck.LoggedUserId())));
+    public IActionResult Add() {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(new AddTaskViewModel(boardRepository.GetByUser(roleCheck.LoggedUserId())));
+    }
 
     [HttpPost]
     public IActionResult Add(AddTaskViewModel task) {
@@ -62,6 +65,7 @@ public class TasksController : Controller {
 
     [HttpGet]
     public IActionResult Update(int id) {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         var task = tasksRepository.GetById(id);
         var userBoards = boardRepository.GetByUser(roleCheck.LoggedUserId());
         foreach(Board board in userBoards) {
@@ -93,7 +97,10 @@ public class TasksController : Controller {
     }
 
     [HttpGet]
-    public IActionResult AssignTask(int taskId) => View(new AssignTaskViewModel(taskId));        
+    public IActionResult AssignTask(int taskId) {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(new AssignTaskViewModel(taskId));        
+    }
 
     [HttpPost]
     public IActionResult AssignTask(AssignTaskViewModel task) {

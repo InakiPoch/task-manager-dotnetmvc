@@ -35,7 +35,10 @@ public class BoardController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() => View(new AddBoardViewModel(roleCheck.LoggedUserId()));
+    public IActionResult Add() {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(new AddBoardViewModel(roleCheck.LoggedUserId()));
+    }
 
     [HttpPost]
     public IActionResult Add(AddBoardViewModel board) {
@@ -54,7 +57,10 @@ public class BoardController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Update(int id) => View(new UpdateBoardViewModel(boardRepository.GetById(id)));
+    public IActionResult Update(int id) {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
+        return View(new UpdateBoardViewModel(boardRepository.GetById(id)));
+    }
 
     [HttpPost]
     public IActionResult Update(UpdateBoardViewModel board) {

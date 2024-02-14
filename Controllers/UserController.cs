@@ -25,6 +25,7 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Add() { 
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
         return View(new AddUserViewModel());
     }
@@ -50,6 +51,7 @@ public class UserController : Controller {
 
     [HttpGet]
     public IActionResult Update(int id) {
+        if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
         return View(new UpdateUserViewModel(userRepository.GetById(id)));
     }

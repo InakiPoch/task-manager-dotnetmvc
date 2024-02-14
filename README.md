@@ -10,4 +10,4 @@
 
 * Un usuario puede actualizar todos los campos de sus tareas, pero solo el estado de las que tiene asignadas que no le pertenecen
 
-* Un administrador posee lectura y edición de Usuarios, y lectura de todas las tareas y tableros en la base de datos, pero no puede modificar globalmente
+* Un administrador posee lectura, edición y eliminación de Usuarios, Tableros y Tareas. De las Tareas que le fueron asignadas solo puede modificar su estado
