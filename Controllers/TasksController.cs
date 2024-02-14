@@ -49,7 +49,7 @@ public class TasksController : Controller {
             var newTask = new Tasks() {
                 Name = task.Name,
                 Description = task.Description,
-                State = TasksState.Ideas,
+                State = TasksState.Ideas, //By default
                 Color = task.Color,
                 BoardId = task.BoardId
             };

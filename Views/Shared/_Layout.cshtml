@@ -40,7 +40,9 @@
                             </li>
                         </ul>
                         <button class="btn btn-outline-light flex-row-reverse">
-                            <a asp-controller="Login" asp-action="Unlog" asp-route-loggedUserId="@roleCheck.LoggedUserId()">Desloguearse</a>
+                            <a asp-controller="Login" asp-action="Unlog" asp-route-loggedUserId="@roleCheck.LoggedUserId()" class="text-reset text-decoration-none">
+                                Desloguearse
+                            </a>
                         </button>
                     </div>
                 </div>
@@ -54,10 +56,8 @@
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted fixed-bottom">
-        <div class="container">
-            <p>&copy; 2024 - Poch Inaki</p>
-        </div>
+    <footer class="border-top footer text-muted fixed-bottom bg-dark text-light text-center">
+        <p>&copy; 2024 - Poch Inaki</p>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

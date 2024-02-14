@@ -24,6 +24,7 @@ public class UpdateTaskViewModel {
 
     public UpdateTaskViewModel() {}
 
+    //If task owner, can update every field, othwerwise it can only update its state
     public UpdateTaskViewModel(Tasks task, bool isOwner) {
         Id = task.Id;
         Name = task.Name;

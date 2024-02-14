@@ -32,7 +32,7 @@
                             <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
-                            <button class="btn btn-success">
+                            <button class="btn btn-danger">
                                 <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                             </button>
                         } else {
@@ -60,7 +60,7 @@
                             <button class="btn btn-success">
                                 <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                             </button>
-                            <button class="btn btn-success">
+                            <button class="btn btn-danger">
                                 <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                             </button>
                         } else {
@@ -87,7 +87,7 @@
                         <button class="btn btn-success">
                             <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
-                        <button class="btn btn-success">
+                        <button class="btn btn-danger">
                             <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
                         </button>
                     </td>
@@ -98,5 +98,7 @@
 </table>
 @* So both admin and operators can only create boards for them and only them *@
 <button class="btn btn-outline-dark">
-    <a asp-controller="Board" asp-action="Add" asp-route-id="@roleCheck.LoggedUserId()">Crear Tablero</a>
+    <a asp-controller="Board" asp-action="Add" asp-route-id="@roleCheck.LoggedUserId()" class="text-reset text-decoration-none">
+        Crear Tablero
+    </a>
 </button>

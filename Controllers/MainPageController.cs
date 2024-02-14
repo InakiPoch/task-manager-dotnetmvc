@@ -12,7 +12,8 @@ public class MainPageController : Controller {
     private ITasksRepository tasksRepository;
     private IBoardRepository boardRepository;
 
-    public MainPageController(ILogger<UserController> logger, IUserRepository userRepository, ITasksRepository tasksRepository, IBoardRepository boardRepository) {
+    public MainPageController(ILogger<UserController> logger, IUserRepository userRepository, ITasksRepository tasksRepository, 
+                                IBoardRepository boardRepository) {
         this.userRepository = userRepository;
         this.tasksRepository = tasksRepository;
         this.boardRepository = boardRepository;
