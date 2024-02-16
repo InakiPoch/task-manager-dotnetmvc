@@ -98,7 +98,7 @@ public class TasksController : Controller {
                 Color = task.Color,
                 AssignedUserId = targetTask.AssignedUserId
             };
-            if(tasksRepository.TaskExists(updatedTask)) {
+            if(AlreadyExists(updatedTask, targetTask)) {
                 throw new Exception("No se puede actualizar. Tarea ya existente");
             }
             tasksRepository.Update(task.Id, updatedTask);
@@ -139,6 +139,8 @@ public class TasksController : Controller {
         }
         return RedirectToAction("Index");
     }
+
+    private bool AlreadyExists(Tasks updatedTask, Tasks task) => updatedTask.Name != task.Name && tasksRepository.TaskExists(updatedTask);
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {

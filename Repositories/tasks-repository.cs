@@ -71,7 +71,7 @@ public class TasksRepository : ITasksRepository {
                         Name = reader["name"].ToString(),
                         State = (TasksState)Convert.ToInt32(reader["state"]),
                         Description = reader["description"].ToString(),
-                        Color = reader["color"].ToString(),
+                        Color = (Color)Convert.ToInt32(reader["color"]),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
                     if(task.AssignedUserId != null) {
@@ -100,7 +100,7 @@ public class TasksRepository : ITasksRepository {
                     task.Name = reader["name"].ToString();
                     task.State = (TasksState)Convert.ToInt32(reader["state"]);
                     task.Description = reader["description"].ToString();
-                    task.Color = reader["color"].ToString();
+                    task.Color = (Color)Convert.ToInt32(reader["color"]);
                     task.BoardName = GetBoardName(task.BoardId);
                     if(reader["assigned_user_id"] != DBNull.Value) {
                         task.AssignedUserId = Convert.ToInt32(reader["assigned_user_id"]);
@@ -131,7 +131,7 @@ public class TasksRepository : ITasksRepository {
                         Name = reader["name"].ToString(),
                         State = (TasksState)Convert.ToInt32(reader["state"]),
                         Description = reader["description"].ToString(),
-                        Color = reader["color"].ToString(),
+                        Color = (Color)Convert.ToInt32(reader["color"]),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
                     if(task.AssignedUserId != null) {
@@ -162,7 +162,7 @@ public class TasksRepository : ITasksRepository {
                         Name = reader["name"].ToString(),
                         State = (TasksState)Convert.ToInt32(reader["state"]),
                         Description = reader["description"].ToString(),
-                        Color = reader["color"].ToString(),
+                        Color = (Color)Convert.ToInt32(reader["color"]),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
                     if(task.AssignedUserId != null) {
@@ -192,7 +192,7 @@ public class TasksRepository : ITasksRepository {
                         Name = reader["name"].ToString(),
                         State = (TasksState)Convert.ToInt32(reader["state"]),
                         Description = reader["description"].ToString(),
-                        Color = reader["color"].ToString(),
+                        Color = (Color)Convert.ToInt32(reader["color"]),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"])
                     };
                     task.BoardName = GetBoardName(task.BoardId);

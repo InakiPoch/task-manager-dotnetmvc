@@ -17,7 +17,7 @@ public class AddTaskViewModel {
     public string Description { get; set; }
 
     [Required(ErrorMessage = "Campo requerido")]
-    public string Color { get; set; }
+    public Color Color { get; set; }
 
     public AddTaskViewModel() {}
 

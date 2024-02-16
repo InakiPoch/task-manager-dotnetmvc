@@ -22,7 +22,14 @@
             </div>
             <div class="form-group">
                 <label for="color">Color</label>
-                <input asp-for = "@Model.Color" class="form-control" id="color">
+                <select asp-for="@Model.Color" class="form-select">
+                    <option value="Green" class="bg-green text-black">General</option>
+                    <option value="Yellow" class="bg-yellow">Secundaria</option>
+                    <option value="Red" class="bg-red text-white">Urgente</option>
+                    <option value="Skyblue" class="bg-skyblue">Opcional</option>
+                    <option value="Grey" class="bg-grey">Baja prioridad</option>
+                    <option value="White">Alta prioridad</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="board">Tablero</label>

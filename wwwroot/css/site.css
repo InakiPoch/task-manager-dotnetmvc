@@ -20,3 +20,51 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-green {
+  color: greenyellow !important;
+}
+
+.text-yellow {
+  color: yellow !important;
+}
+
+.text-red {
+  color: red !important;
+}
+
+.text-skyblue {
+  color: skyblue !important;
+}
+
+.text-grey {
+  color: gray !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.bg-green {
+  background-color: greenyellow !important;
+}
+
+.bg-yellow {
+  background-color: yellow !important;
+}
+
+.bg-red {
+  background-color: red !important;
+}
+
+.bg-skyblue {
+  background-color: skyblue !important;
+}
+
+.bg-grey {
+  background-color: gray !important;
+}
+
+.bg-white {
+  background-color: white !important;
+}

@@ -75,7 +75,7 @@ public class UserController : Controller {
                 Role = user.Role,
                 Password = targetUser.Password
             };
-            if(userRepository.UserExists(updatedUser)) {
+            if(AlreadyExists(updatedUser, targetUser)) {
                 throw new Exception("No se puede actualizar el nombre. Usuario ya existente");
             }
             userRepository.Update(user.Id, updatedUser);
@@ -99,6 +99,8 @@ public class UserController : Controller {
         }
         return RedirectToAction("Index");
     }
+
+    private bool AlreadyExists(User updatedUser, User user) => updatedUser.Username != user.Username && userRepository.UserExists(updatedUser);
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {

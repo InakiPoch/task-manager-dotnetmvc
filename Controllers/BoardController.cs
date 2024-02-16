@@ -84,7 +84,7 @@ public class BoardController : Controller {
                 Name = board.Name,
                 Description = board.Description
             };
-            if(boardRepository.BoardExists(updatedBoard)) {
+            if(AlreadyExists(updatedBoard, targetBoard)) {
                 throw new Exception("No se puede actualizar el tablero. Tablero ya existente");
             }
             boardRepository.Update(board.Id, updatedBoard);
@@ -107,6 +107,8 @@ public class BoardController : Controller {
         }
         return RedirectToAction("Index");
     }
+
+    private bool AlreadyExists(Board updatedBoard, Board board) => updatedBoard.Name != board.Name && boardRepository.BoardExists(updatedBoard);
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {

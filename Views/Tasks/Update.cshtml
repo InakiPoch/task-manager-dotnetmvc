@@ -37,9 +37,23 @@
             <div class="form-group">
                 <label for="color">Color</label>
                 @if(Model.IsOwner) {
-                    <input asp-for = "@Model.Color" class="form-control" id="color">
+                    <select asp-for="@Model.Color" class="form-select">
+                        <option value="Green" class="bg-green text-black">General</option>
+                        <option value="Yellow" class="bg-yellow">Secundaria</option>
+                        <option value="Red" class="bg-red text-white">Urgente</option>
+                        <option value="Skyblue" class="bg-info text-white">Opcional</option>
+                        <option value="Grey" class="bg-grey">Baja prioridad</option>
+                        <option value="White">Alta prioridad</option>
+                    </select>
                 } else {
-                    <input asp-for = "@Model.Color" class="form-control" id="color" disabled>
+                    <select asp-for="@Model.Color" class="form-select" disabled>
+                        <option value="Green" class="bg-green text-black">General</option>
+                        <option value="Yellow" class="bg-yellow">Secundaria</option>
+                        <option value="Red" class="bg-red text-white">Urgente</option>
+                        <option value="Skyblue" class="bg-info text-white">Opcional</option>
+                        <option value="Grey" class="bg-grey">Baja prioridad</option>
+                        <option value="White">Alta prioridad</option>
+                    </select>
                     <input hidden asp-for = "@Model.Color">
                 }
             </div>

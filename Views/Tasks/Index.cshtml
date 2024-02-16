@@ -29,7 +29,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td>@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
@@ -70,7 +70,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td>@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
@@ -108,7 +108,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td>@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
