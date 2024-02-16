@@ -11,4 +11,5 @@ public class Tasks {
     public string Color { get; set; }
     public int? AssignedUserId { get; set; }
     public string BoardName { get; set; }
+    public string AssignedUserName { get; set; }
 }

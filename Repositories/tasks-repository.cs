@@ -73,6 +73,9 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    if(task.AssignedUserId != null) {
+                        task.AssignedUserName = GetAssignedUserName((int)task.AssignedUserId);
+                    }
                     task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
@@ -130,6 +133,9 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    if(task.AssignedUserId != null) {
+                        task.AssignedUserName = GetAssignedUserName((int)task.AssignedUserId);
+                    }
                     task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
@@ -158,6 +164,9 @@ public class TasksRepository : ITasksRepository {
                         Color = reader["color"].ToString(),
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"]) 
                     };
+                    if(task.AssignedUserId != null) {
+                        task.AssignedUserName = GetAssignedUserName((int)task.AssignedUserId);
+                    }
                     task.BoardName = GetBoardName(task.BoardId);
                     tasks.Add(task);
                 }
@@ -186,6 +195,9 @@ public class TasksRepository : ITasksRepository {
                         AssignedUserId = reader["assigned_user_id"] == DBNull.Value ? null : Convert.ToInt32(reader["assigned_user_id"])
                     };
                     task.BoardName = GetBoardName(task.BoardId);
+                    if(task.AssignedUserId != null) {
+                        task.AssignedUserName = GetAssignedUserName((int)task.AssignedUserId);
+                    }
                     tasks.Add(task);
                 }
             }
@@ -223,5 +235,11 @@ public class TasksRepository : ITasksRepository {
         BoardRepository boardRepository = new BoardRepository(connectionPath);
         Board board = boardRepository.GetById(id);
         return board.Name;
+    }
+
+    private string GetAssignedUserName(int id) {
+        UserRepository userRepository = new UserRepository(connectionPath);
+        User user = userRepository.GetById(id);
+        return user.Username;
     }
 }
