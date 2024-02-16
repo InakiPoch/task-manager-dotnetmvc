@@ -146,9 +146,12 @@ public class BoardRepository : IBoardRepository {
     public void Delete(int id) {
         string queryText = "DELETE FROM board WHERE id = @id";
         using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+            connection.Open();
+            using (SQLiteCommand command = new SQLiteCommand("PRAGMA foreign_keys = 1;", connection)) {
+                command.ExecuteNonQuery();
+            } //Enables FK options, otherwise it doesn't detect them
             SQLiteCommand query = new SQLiteCommand(queryText, connection);
             query.Parameters.Add(new SQLiteParameter("@id", id));
-            connection.Open();
             query.ExecuteNonQuery();
             connection.Close();
         }
