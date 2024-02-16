@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 namespace tl2_tp10_2023_InakiPoch.ViewModels;
 
 public class AddBoardViewModel {
+    public string ErrorMessage { get; set; }
+
     [Required(ErrorMessage = "Campo requerido")]
     public int OwnerId { get; set; }
 

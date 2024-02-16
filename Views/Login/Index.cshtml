@@ -19,6 +19,9 @@
                 <input asp-for="@Model.Password" type="password" class="form-control" id="pass">
                 <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
+            @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
+                <p class="text-danger text-center mt-3">@Model.ErrorMessage</p>
+            }
             <button type="submit" class="btn btn-primary mx-auto mt-3">Ingresar</button>
         </form>
     </div>

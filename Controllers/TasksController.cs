@@ -40,14 +40,18 @@ public class TasksController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() {
+    public IActionResult Add(string errorMessage = null) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(new AddTaskViewModel(boardRepository.GetByUser(roleCheck.LoggedUserId())));
+        var model = new AddTaskViewModel(boardRepository.GetByUser(roleCheck.LoggedUserId())) {
+            ErrorMessage = errorMessage
+        };
+        return View(model);
     }
 
     [HttpPost]
     public IActionResult Add(AddTaskViewModel task) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
+        task.BoardsAvailable = boardRepository.GetByUser(roleCheck.LoggedUserId()); //Othwerwise BoardsAvailable is null
         try {
             var newTask = new Tasks() {
                 Name = task.Name,
@@ -56,23 +60,28 @@ public class TasksController : Controller {
                 Color = task.Color,
                 BoardId = task.BoardId
             };
+            if(tasksRepository.TaskExists(newTask)) {
+                throw new Exception("Tarea ya existente");
+            }
             tasksRepository.Add(newTask.BoardId, newTask);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            task.ErrorMessage = "Tarea ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return View("Add", task);
     }
 
     [HttpGet]
-    public IActionResult Update(int id) {
+    public IActionResult Update(int id, string errorMessage = null) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         var task = tasksRepository.GetById(id);
         var userBoards = boardRepository.GetByUser(roleCheck.LoggedUserId());
         foreach(Board board in userBoards) {
             if(board.Id == task.BoardId)
-                return View(new UpdateTaskViewModel(task, true));
+                return View(new UpdateTaskViewModel(task, true) { ErrorMessage = errorMessage });
         }
-        return View(new UpdateTaskViewModel(task, false));
+        return View(new UpdateTaskViewModel(task, false) { ErrorMessage = errorMessage });
     }
 
     [HttpPost]
@@ -89,11 +98,16 @@ public class TasksController : Controller {
                 Color = task.Color,
                 AssignedUserId = targetTask.AssignedUserId
             };
+            if(tasksRepository.TaskExists(updatedTask)) {
+                throw new Exception("No se puede actualizar. Tarea ya existente");
+            }
             tasksRepository.Update(task.Id, updatedTask);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            task.ErrorMessage = "No se puede actualizar. Tarea ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return View("Update", task);
     }
 
     [HttpGet]

@@ -10,6 +10,7 @@ public interface IBoardRepository {
     List<Board> GetAll();
     List<Board> GetByUser(int userId);
     List<Board> GetByTask(int userId);
+    bool BoardExists(Board board);
     void Delete(int id);
 }
 
@@ -141,6 +142,21 @@ public class BoardRepository : IBoardRepository {
             connection.Close();
         }
         return boards;
+    }
+
+    public bool BoardExists(Board board) {
+        string queryText = "SELECT name FROM board WHERE name = @name";
+        bool exists;
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+        SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@name", board.Name));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                exists = reader.Read();
+            }
+            connection.Close();
+        }
+        return exists;
     }
 
     public void Delete(int id) {

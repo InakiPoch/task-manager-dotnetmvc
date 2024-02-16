@@ -35,31 +35,42 @@ public class BoardController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() {
+    public IActionResult Add(string errorMessage = null) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(new AddBoardViewModel(roleCheck.LoggedUserId()));
+        var model = new AddBoardViewModel(roleCheck.LoggedUserId()) {
+            ErrorMessage = errorMessage
+        };
+        return View(model);
     }
 
     [HttpPost]
     public IActionResult Add(AddBoardViewModel board) {
-        if(!ModelState.IsValid) return RedirectToAction("Index");
-        var newBoard = new Board() {
-            Name = board.Name,
-            Description = board.Description,
-            OwnerId = board.OwnerId
-        };
         try {
+            if(!ModelState.IsValid) return RedirectToAction("Index");
+            var newBoard = new Board() {
+                Name = board.Name,
+                Description = board.Description,
+                OwnerId = board.OwnerId
+            };
+            if(boardRepository.BoardExists(newBoard)) {
+                throw new Exception("Tablero ya existente");
+            }
             boardRepository.Add(newBoard);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            board.ErrorMessage = "Tablero ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return View("Add", board);
     }
 
     [HttpGet]
-    public IActionResult Update(int id) {
+    public IActionResult Update(int id, string errorMesagge = null) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(new UpdateBoardViewModel(boardRepository.GetById(id)));
+        var model = new UpdateBoardViewModel(boardRepository.GetById(id)) {
+            ErrorMessage = errorMesagge
+        };
+        return View(model);
     }
 
     [HttpPost]
@@ -73,11 +84,16 @@ public class BoardController : Controller {
                 Name = board.Name,
                 Description = board.Description
             };
+            if(boardRepository.BoardExists(updatedBoard)) {
+                throw new Exception("No se puede actualizar el tablero. Tablero ya existente");
+            }
             boardRepository.Update(board.Id, updatedBoard);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            board.ErrorMessage = "No se puede actualizar el tablero. Tablero ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return View("Update", board);
     }
 
 

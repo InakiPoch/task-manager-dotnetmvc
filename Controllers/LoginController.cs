@@ -18,9 +18,12 @@ public class LoginController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Index() {
-        return View(new LoginViewModel());
-    }
+        public IActionResult Index(string errorMessage = null) {
+            var model = new LoginViewModel() {
+                ErrorMessage = errorMessage
+            };
+            return View(model);
+        }
 
     [HttpPost]
     public IActionResult Login(LoginViewModel user) {
@@ -30,12 +33,13 @@ public class LoginController : Controller {
             _logger.LogInformation("User " + loggedUser.Username + " logged successfully");
             return RedirectToRoute(new { controller = "MainPage", action = "Index" });
         } catch (Exception e) {
+            user.ErrorMessage = "Nombre de Usuario o Contraseña incorrectos";
             _logger.LogError(e.ToString());
             _logger.LogWarning(
                 "Invalid user loggin attempt - Username: " + user.Username + " / Password: " + user.Password
             );
-            return RedirectToAction("Index");
         }
+        return View("Index", user);
     }
 
     [HttpGet]

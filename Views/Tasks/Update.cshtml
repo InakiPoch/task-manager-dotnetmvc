@@ -12,6 +12,7 @@
         <h1>@ViewData["Title"]</h1>
         <form asp-controller="Tasks" asp-action="Update">
             <input hidden asp-for = "@Model.Id">
+            <input hidden asp-for = "@Model.IsOwner">
             <div class="form-group">
                 <label for="name">Nombre de la tarea</label>
                 @if(Model.IsOwner) {
@@ -21,6 +22,9 @@
                     <input hidden asp-for = "@Model.Name">
                 }
             </div>
+            @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
+                <p class="text-danger text-center">@Model.ErrorMessage</p>
+            }
             <div class="form-group">
                 <label for="description">Descripcion</label>
                 @if(Model.IsOwner) {

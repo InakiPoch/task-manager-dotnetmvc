@@ -13,6 +13,9 @@
                 <label for="name">Nombre de la tarea</label>
                 <input asp-for = "@Model.Name" class="form-control" id="name" required>
             </div>
+            @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
+                <p class="text-danger text-center">@Model.ErrorMessage</p>
+            }
             <div class="form-group">
                 <label for="description">Descripcion</label>
                 <input asp-for = "@Model.Description" class="form-control" id="description">

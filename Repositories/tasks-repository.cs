@@ -11,6 +11,7 @@ public interface ITasksRepository {
     List<Tasks> GetByAssigned(int userId);
     List<Tasks> GetByUser(int userId);
     List<Tasks> GetByBoard(int boardId);
+    bool TaskExists(Tasks task);
     void Delete(int id);
     void AssignTask(int usarId, int taskId);
 }
@@ -206,6 +207,21 @@ public class TasksRepository : ITasksRepository {
         if(tasks.Count == 0)
             throw new Exception("La tarea no pertenece a ningun tablero"); 
         return tasks;
+    }
+
+    public bool TaskExists(Tasks task) {
+        string queryText = "SELECT name FROM task WHERE name = @name";
+        bool exists;
+        using(SQLiteConnection connection = new SQLiteConnection(connectionPath)) {
+        SQLiteCommand query = new SQLiteCommand(queryText, connection);
+            query.Parameters.Add(new SQLiteParameter("@name", task.Name));
+            connection.Open();
+            using(SQLiteDataReader reader = query.ExecuteReader()) {
+                exists = reader.Read();
+            }
+            connection.Close();
+        }
+        return exists;
     }
 
     public void Delete(int id) {

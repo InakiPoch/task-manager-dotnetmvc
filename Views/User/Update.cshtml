@@ -14,6 +14,9 @@
                 <label for="username">Nuevo nombre de usuario</label>
                 <input asp-for = "@Model.Username" class="form-control" id="username">
             </div>
+            @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
+                <p class="text-danger text-center mt-3">@Model.ErrorMessage</p>
+            }
             <button type="submit" class="btn btn-primary mx-auto mt-3">Actualizar</button>
         </form>
     </div>

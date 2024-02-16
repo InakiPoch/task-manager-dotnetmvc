@@ -24,10 +24,13 @@ public class UserController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Add() { 
+    public IActionResult Add(string errorMessage = null) { 
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
-        return View(new AddUserViewModel());
+        var model = new AddUserViewModel() {
+            ErrorMessage = errorMessage
+        };
+        return View(model);
     }
 
     [HttpPost]
@@ -43,17 +46,22 @@ public class UserController : Controller {
                 throw new Exception("Usuario ya existe");
             }
             userRepository.Add(newUser);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            user.ErrorMessage = "Usuario ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("Add", user);
     }
 
     [HttpGet]
-    public IActionResult Update(int id) {
+    public IActionResult Update(int id, string errorMessage = null) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
         if(!roleCheck.IsAdmin()) return RedirectToAction("Index");
-        return View(new UpdateUserViewModel(userRepository.GetById(id)));
+        var model = new UpdateUserViewModel(userRepository.GetById(id)) {
+            ErrorMessage = errorMessage
+        };
+        return View(model);
     }
 
     [HttpPost]
@@ -67,11 +75,16 @@ public class UserController : Controller {
                 Role = user.Role,
                 Password = targetUser.Password
             };
+            if(userRepository.UserExists(updatedUser)) {
+                throw new Exception("No se puede actualizar el nombre. Usuario ya existente");
+            }
             userRepository.Update(user.Id, updatedUser);
+            return RedirectToAction("Index");
         } catch (Exception e) {
+            user.ErrorMessage = "No se puede actualizar el nombre. Usuario ya existente";
             _logger.LogError(e.ToString());
         }
-        return RedirectToAction("Index");
+        return View("Update", user);
     }
 
 

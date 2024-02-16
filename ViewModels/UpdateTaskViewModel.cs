@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace tl2_tp10_2023_InakiPoch.ViewModels;
 
 public class UpdateTaskViewModel {
+    public string ErrorMessage { get; set; }
     public bool IsOwner { get; set; }
 
     [Required(ErrorMessage = "Campo requerido")]
