@@ -12,7 +12,11 @@
             <input hidden asp-for = "@Model.TaskId">
             <div class="form-group">
                 <label for="username">Usuario al Asignar la Tarea</label>
-                <input asp-for = "@Model.Username" class="form-control" id="username">
+                <select asp-for="@Model.User" class="form-select">
+                    @foreach(User user in Model.UsersAvailable) {
+                        <option value="@user.Id">@user.Username</option>
+                    }  
+                </select>
             </div>
             <button type="submit" class="btn btn-primary mx-auto mt-3">Asignar</button>
         </form>

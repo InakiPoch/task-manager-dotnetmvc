@@ -99,14 +99,14 @@ public class TasksController : Controller {
     [HttpGet]
     public IActionResult AssignTask(int taskId) {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index"});
-        return View(new AssignTaskViewModel(taskId));        
+        return View(new AssignTaskViewModel(taskId, userRepository.GetAll()));        
     }
 
     [HttpPost]
     public IActionResult AssignTask(AssignTaskViewModel task) {
         if(!ModelState.IsValid) return RedirectToAction("Index");
         try {
-            var user = userRepository.GetByUsername(task.Username);
+            var user = userRepository.GetById(task.User);
             tasksRepository.AssignTask(user.Id, task.TaskId);
         } catch (Exception e) {
             _logger.LogError(e.ToString());
