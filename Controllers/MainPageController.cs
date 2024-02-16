@@ -25,10 +25,14 @@ public class MainPageController : Controller {
     [HttpGet]
     public IActionResult Index() {
         if(roleCheck.NotLogged()) return RedirectToRoute(new { controller = "Login", action = "Index" });
+        var userId = roleCheck.LoggedUserId();
+        int personalBoards = boardRepository.GetByUser(userId).Count;
+        int personalTasks = tasksRepository.GetByUser(userId).Count;
+        int assignedTasks = tasksRepository.GetByAssigned(userId).Count;
         int totalTasks = tasksRepository.GetAll().Count;
         int totalBoards = boardRepository.GetAll().Count;
         int totalUsers = userRepository.GetAll().Count;
-        return View(new MainPageViewModel(totalTasks, totalBoards, totalUsers));
+        return View(new MainPageViewModel(personalBoards, personalTasks,assignedTasks, totalTasks, totalBoards, totalUsers));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

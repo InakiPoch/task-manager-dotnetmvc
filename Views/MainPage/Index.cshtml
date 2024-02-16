@@ -13,20 +13,32 @@
     </div>
 </div>
 <div class="container">
-    <div class="d-flex justify-content-around">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <h2>Tableros Propios</h2>
+            <p>@Model.PersonalBoards</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <h2>Tareas Propias</h2>
+            <p>@Model.PersonalTasks</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <h2>Tareas Asignadas</h2>
+            <p>@Model.AssignedTasks</p>
+        </div>
         @if(roleCheck.IsAdmin()) {
             <div class="col-md-4 text-center">
                 <h2>Total Usuarios</h2>
                 <p>@Model.TotalUsers</p>
             </div>
+            <div class="col-md-4 text-center">
+                <h2>Total Tareas</h2>
+                <p>@Model.TotalTasks</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <h2>Total Tableros</h2>
+                <p>@Model.TotalBoards</p>
+            </div>
         }
-        <div class="col-md-4 text-center">
-            <h2>Total Tareas</h2>
-            <p>@Model.TotalTasks</p>
-        </div>
-        <div class="col-md-4 text-center">
-            <h2>Total Tableros</h2>
-            <p>@Model.TotalBoards</p>
-        </div>
     </div>
 </div>
