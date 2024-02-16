@@ -32,9 +32,9 @@
                             <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
-                            <button class="btn btn-danger">
-                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
-                            </button>
+                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" onclick="return confirm('Desea borrar el tablero?')" class="btn btn-danger">
+                                <span class="badge badge-primary">Borrar</span>
+                            </a>
                         } else {
                             <p></p>
                         }
@@ -60,9 +60,9 @@
                             <button class="btn btn-success">
                                 <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                             </button>
-                            <button class="btn btn-danger">
-                                <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
-                            </button>
+                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" onclick="return confirm('Desea borrar el tablero?')" class="btn btn-danger">
+                                <span class="badge badge-primary">Borrar</span>
+                            </a>
                         } else {
                             <p></p>
                         }
@@ -87,9 +87,9 @@
                         <button class="btn btn-success">
                             <a asp-controller="Board" asp-action="Update" asp-route-id="@board.Id" class="badge badge-primary">Actualizar</a>
                         </button>
-                        <button class="btn btn-danger">
-                            <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" class="badge badge-primary">Borrar</a>
-                        </button>
+                        <a asp-controller="Board" asp-action="Delete" asp-route-id="@board.Id" onclick="return confirm('Desea borrar el tablero?')" class="btn btn-danger">
+                            <span class="badge badge-primary">Borrar</span>
+                        </a>
                     </td>
                 </tr>
             }

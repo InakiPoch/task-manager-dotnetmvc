@@ -27,9 +27,9 @@
                     <button class="btn btn-success">
                         <a asp-controller="User" asp-action="Update" asp-route-id="@user.Id" class="badge badge-primary">Actualizar</a>
                     </button>
-                    <button class="btn btn-danger">
-                        <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="badge badge-primary">Borrar</a>
-                    </button>
+                    <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" onclick="return confirm('Desea borrar el usuario?')" class="btn btn-danger">
+                        <span class="badge badge-primary">Borrar</span>
+                    </a>
                 </td>
             </tr>
         }

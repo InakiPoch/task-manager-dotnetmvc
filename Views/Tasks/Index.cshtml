@@ -47,9 +47,9 @@
                             <a asp-controller="Tasks" asp-action="AssignTask" asp-route-taskId="@task.Id" class="badge badge-primary">Asignar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
-                            <button class="btn btn-danger">
-                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
-                            </button>
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" onclick="return confirm('Desea borrar la tarea?')" class="btn btn-danger">
+                                <span class="badge badge-primary">Borrar</span>
+                            </a>
                         }
                     </td>
                 </tr>
@@ -85,9 +85,9 @@
                             <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
-                            <button class="btn btn-danger">
-                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
-                            </button>
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" onclick="return confirm('Desea borrar la tarea?')" class="btn btn-danger">
+                                <span class="badge badge-primary">Borrar</span>
+                            </a>
                         }
                     </td>
                 </tr>
@@ -123,9 +123,9 @@
                             <a asp-controller="Tasks" asp-action="Update" asp-route-id="@task.Id" class="badge badge-primary">Actualizar</a>
                         </button>
                         @if(roleCheck.IsAdmin()) {
-                            <button class="btn btn-danger">
-                                <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" class="badge badge-primary">Borrar</a>
-                            </button>
+                            <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id" onclick="return confirm('Desea borrar la tarea?')" class="btn btn-danger">
+                                <span class="badge badge-primary">Borrar</span>
+                            </a>
                         }
                     </td>
                 </tr>
