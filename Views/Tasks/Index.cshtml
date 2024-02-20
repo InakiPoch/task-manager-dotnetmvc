@@ -1,6 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     var roleCheck = Context.Items["RoleCheck"] as RoleCheck;
+    string getColorValue(Color color) {
+        switch(color) {
+            case @Color.Green:
+                return "General";
+            case @Color.Yellow:
+                return "Secundaria";
+            case @Color.Red:
+                return "Urgente";
+            case @Color.Skyblue:
+                return "Opcional";
+            case @Color.Grey:
+                return "Baja Prioridad";
+            case @Color.White:
+                return "Alta Prioridad";
+        }
+        return "INVALIDO";
+    }
 }
 
 @using tl2_tp10_2023_InakiPoch.ViewModels
@@ -29,7 +46,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@getColorValue(task.Color)</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
@@ -70,7 +87,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@getColorValue(task.Color)</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
@@ -108,7 +125,7 @@
                 <tr>
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td class="text-@(task.Color.ToString().ToLower())">@task.Color</td>
+                    <td class="text-@(task.Color.ToString().ToLower())">@getColorValue(task.Color)</td>
                     <td>@Enum.GetName(task.State)</td>
                     <td>@task.BoardName</td>
                     @if(task.AssignedUserId == null) {
