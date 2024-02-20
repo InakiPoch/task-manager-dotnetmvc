@@ -12,7 +12,8 @@
             <input hidden asp-for = "@Model.Id">
             <div class="form-group">
                 <label for="username">Nuevo nombre de usuario</label>
-                <input asp-for = "@Model.Username" class="form-control" id="username">
+                <input asp-for = "@Model.Username" class="form-control" id="username" required>
+                <span asp-validation-for="@Model.Username" class="text-danger"></span>
             </div>
             @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
                 <p class="text-danger text-center mt-3">@Model.ErrorMessage</p>

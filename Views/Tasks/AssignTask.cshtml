@@ -17,6 +17,7 @@
                         <option value="@user.Id">@user.Username</option>
                     }  
                 </select>
+                <span asp-validation-for="@Model.User" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary mx-auto mt-3">Asignar</button>
         </form>

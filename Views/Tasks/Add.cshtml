@@ -12,6 +12,7 @@
             <div class="form-group">
                 <label for="name">Nombre de la tarea</label>
                 <input asp-for = "@Model.Name" class="form-control" id="name" required>
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
             </div>
             @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
                 <p class="text-danger text-center">@Model.ErrorMessage</p>
@@ -19,10 +20,11 @@
             <div class="form-group">
                 <label for="description">Descripcion</label>
                 <input asp-for = "@Model.Description" class="form-control" id="description">
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="color">Color</label>
-                <select asp-for="@Model.Color" class="form-select">
+                <select asp-for="@Model.Color" class="form-select" required>
                     <option value="Green" class="bg-green text-black">General</option>
                     <option value="Yellow" class="bg-yellow">Secundaria</option>
                     <option value="Red" class="bg-red text-white">Urgente</option>
@@ -30,14 +32,16 @@
                     <option value="Grey" class="bg-grey">Baja prioridad</option>
                     <option value="White">Alta prioridad</option>
                 </select>
+                <span asp-validation-for="@Model.Color" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="board">Tablero</label>
-                <select asp-for="@Model.BoardId" class="form-select">
+                <select asp-for="@Model.BoardId" class="form-select" required>
                     @foreach(Board board in Model.BoardsAvailable) {
                         <option value="@board.Id">@board.Name</option>
                     }
                 </select>
+                <span asp-validation-for="@Model.BoardId" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary mx-auto mt-3">Crear</button>
         </form>

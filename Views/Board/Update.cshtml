@@ -12,7 +12,8 @@
             <input hidden asp-for = "@Model.Id">
             <div class="form-group">
                 <label for="username">Nuevo nombre del tablero</label>
-                <input asp-for = "@Model.Name" class="form-control" id="username">
+                <input asp-for = "@Model.Name" class="form-control" id="username" required>
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
             </div>
             @if(!string.IsNullOrEmpty(Model.ErrorMessage)) {
                 <p class="text-danger text-center">@Model.ErrorMessage</p>
@@ -20,6 +21,7 @@
             <div class="form-group">
                 <label for="username">Nueva descripcion</label>
                 <input asp-for = "@Model.Description" class="form-control" id="username">
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary mx-auto mt-3">Actualizar</button>
         </form>
