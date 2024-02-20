@@ -45,8 +45,8 @@ public class LoginController : Controller {
     [HttpGet]
     public IActionResult Unlog(int loggedUserId) {
         try {
-            var loggedUser = userRepository.GetById(loggedUserId);
             UnlogUser();
+            var loggedUser = userRepository.GetById(loggedUserId);
             _logger.LogInformation("User " + loggedUser.Username + " unlogged successfully");
             return RedirectToAction("Index");
         } catch (Exception e) {

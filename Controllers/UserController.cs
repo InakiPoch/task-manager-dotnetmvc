@@ -94,6 +94,9 @@ public class UserController : Controller {
         if(!ModelState.IsValid) return RedirectToAction("Index");
         try {
             userRepository.Delete(id);  
+            if(id == roleCheck.LoggedUserId()) {
+                return RedirectToRoute(new {controller = "Login", action = "Index"});
+            }
         } catch (Exception e) {
             _logger.LogError(e.ToString());
         }
