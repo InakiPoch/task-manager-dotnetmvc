@@ -46,13 +46,18 @@ public class LoginController : Controller {
     public IActionResult Unlog(int loggedUserId) {
         try {
             UnlogUser();
-            var loggedUser = userRepository.GetById(loggedUserId);
-            _logger.LogInformation("User " + loggedUser.Username + " unlogged successfully");
+            if(loggedUserId != 0) { //User exists
+                var loggedUser = userRepository.GetById(loggedUserId);
+                _logger.LogInformation("User " + loggedUser.Username + " unlogged successfully");
+            }
             return RedirectToAction("Index");
         } catch (Exception e) {
             _logger.LogError(e.ToString());
-            _logger.LogWarning("Couldn't unlog user");
-            return RedirectToRoute(new { controller = "MainPage", action = "Index"});
+            if(loggedUserId != 0) { //User exists
+                _logger.LogWarning("Couldn't unlog user");
+                return RedirectToRoute(new { controller = "MainPage", action = "Index"});
+            }
+            return RedirectToAction("Index");
         }
     }
 
