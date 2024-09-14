@@ -1,13 +1,34 @@
-# PROYECTO TALLER DE LENGUAJES 2
+# TASK MANAGER WEBSITE
 
-* Nombre: Iñaki Poch
+Simple task manager website done with ASP .NET 8.0, building a new MVC Project.
 
-* Carrera: Ingeniería en Informática
+* Final Project of C#'s university course.
 
-## Consideraciones del proyecto
+* DataBase done locally with SQLite 3.
 
-* Un usuario solo puede crear tableros para uno mismo independientemente de su nivel de acceso
 
-* Un usuario puede actualizar todos los campos de sus tareas, pero solo el estado de las que tiene asignadas que no le pertenecen
+## Project Considerations
 
-* Un administrador posee lectura, edición y eliminación de Usuarios, Tableros y Tareas. De las Tareas que le fueron asignadas solo puede modificar su estado
+* A user can only create boards for themselves, regardless of their access level.
+
+* A user can update all fields of their own tasks, but only the status of tasks assigned to them that do not belong to them
+
+* An administrator has read, edit, and delete permissions for Users, Boards, and Tasks. For the tasks assigned to them, the administrator can only modify the status.
+
+## Initialization
+
+Need to have SQLiteStudio installed to import database within the repo.
+
+Website uses a login page. There are two types of users:
+
+### Administrator
+
+* Username: usuario1
+
+* Password: admin1
+
+### Casual
+
+* Username: usuario4
+
+* Password: op2
