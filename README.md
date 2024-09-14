@@ -7,6 +7,11 @@ Simple task manager website done with ASP .NET 8.0, building a new MVC Project.
 * DataBase done locally with SQLite 3.
 
 
+![MainPage](https://github.com/user-attachments/assets/3b0eed3d-d6e9-4fb8-8683-01dbe2d3db56)
+
+![TaskManagerPage](https://github.com/user-attachments/assets/6dfa85a0-4d01-4d44-a7d3-e3e8c54c2a05)
+
+
 ## Project Considerations
 
 * A user can only create boards for themselves, regardless of their access level.
